@@ -1,6 +1,7 @@
 import express from 'express';
 import Record from '../models/records.mjs';
 import mongoose from 'mongoose';
+
 const router = express.Router();
 
 router.get('/', async (req, res) => {

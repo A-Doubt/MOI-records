@@ -3,12 +3,13 @@ import mongoose from 'mongoose';
 import records from './routes/records.mjs';
 import players from './routes/players.mjs';
 import bodyParser from 'body-parser';
+import config from 'config';
 
 const app = express();
-const url = 'mongodb://127.0.0.1:27017/moi';
+const db = config.get('db');
 mongoose
-	.connect(url)
-	.then(console.log('Connected to MongoDB.'))
+	.connect(db)
+	.then(console.log(`Connected to ${db}...`))
 	.catch((err) => console.error(err.message));
 
 app.use(bodyParser.json());
