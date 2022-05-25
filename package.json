@@ -1,0 +1,17 @@
+{
+  "name": "moi",
+  "version": "1.0.0",
+  "description": "Record times spreadsheet for Men of Iron clan in an MMORPG called Runescape",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paweł Wiśniewski",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "joi": "^17.6.0",
+    "mongoose": "^6.3.4"
+  }
+}
