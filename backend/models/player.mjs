@@ -1,5 +1,6 @@
+import Joi from 'joi';
 import mongoose from 'mongoose';
-import Record from './records.mjs';
+import Record from './record.mjs';
 
 const playerSchema = new mongoose.Schema({
 	name: {
@@ -13,4 +14,13 @@ const playerSchema = new mongoose.Schema({
 
 const Player = mongoose.model('Player', playerSchema);
 
+function validatePlayer(player) {
+	const schema = Joi.object({
+		name: Joi.string().min(1).max(20).required(),
+		records: Joi.array(),
+	})
+	return schema.validate(player);
+}
+
 export default Player;
+export { validatePlayer };

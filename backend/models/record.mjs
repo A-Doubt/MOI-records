@@ -50,16 +50,20 @@ const recordSchema = new mongoose.Schema({
 		maxlength: 1000,
 	},
 	players: [
-		new mongoose.Schema({
-			_id: {
-				type: mongoose.Types.ObjectId,
-				required: true,
+		new mongoose.Schema(
+			{
+				playerId: {
+					type: mongoose.Types.ObjectId,
+					required: true,
+					ref: 'Player',
+				},
+				style: {
+					type: String,
+					enum: ['melee', 'ranged', 'magic'],
+				},
 			},
-			style: {
-				type: String,
-				enum: ['melee', 'ranged', 'magic'],
-			},
-		}),
+			{ _id: false }
+		),
 	],
 });
 
@@ -68,6 +72,8 @@ const Record = mongoose.model('Record', recordSchema);
 function validateRecord(record) {
 	const schema = Joi.object({
 		_id: objectId(),
+		dateAdded: Joi.date(),
+		dateKilled: Joi.date(),
 		encounter: Joi.object().keys({
 			bossName: Joi.string().min(3).max(255).required(),
 			hardmode: Joi.boolean().required(),
@@ -78,7 +84,7 @@ function validateRecord(record) {
 		notes: Joi.string().min(3).max(1000),
 		players: Joi.array().items(
 			Joi.object().keys({
-				_id: objectId().required(),
+				playerId: objectId().required(),
 				style: Joi.string().valid('melee', 'ranged', 'magic'),
 			})
 		),
@@ -86,24 +92,24 @@ function validateRecord(record) {
 	return schema.validate(record);
 }
 
-const record = {
-	_id: (new mongoose.Types.ObjectId()).toHexString(),
-	timeInTicks: 666,
-	encounter: {
-		bossName: 'Vorago',
-		hardmode: true,
-		teamSize: 1,
-	},
-	dateAdded: new Date(),
-	dateKilled: new Date(),
-	players: [{ _id: (new mongoose.Types.ObjectId()).toHexString(), style: 'melee' }],
-	rotation: 'Vitalis',
-	notes: 'test note',
-}
 
-// const { error, value } = validateRecord(record)
-// console.log('ERROR: ', error);
-// console.log('VALUE: ', value);
+// const record = new Record({
+// 	timeInTicks: 666,
+// 	encounter: {
+// 		bossName: 'Vorago',
+// 		hardmode: true,
+// 		teamSize: 1,
+// 	},
+// 	players: [{ playerId: new mongoose.Types.ObjectId(), style: 'melee' }],
+// 	rotation: 'Vitalis',
+// 	notes: 'test note',
+// })
+// async function saveRecord() {
+// 	await record.save();
+// 	console.log('record saved');
+// }
+// saveRecord()
+
 
 export default Record;
 export { validateRecord };

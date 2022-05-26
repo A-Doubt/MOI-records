@@ -1,8 +1,8 @@
 import express from 'express';
-import Record from '../models/records.mjs';
+import Record from '../models/record.mjs';
 import mongoose from 'mongoose';
 import validateObjectId from '../middleware/validateObjectId.mjs';
-import { validateRecord } from '../models/records.mjs';
+import { validateRecord } from '../models/record.mjs';
 
 const router = express.Router();
 
@@ -33,10 +33,9 @@ router.get('/:id', validateObjectId, async (req, res) => {
 router.post('/', async (req, res) => {
 	try {
 		// Validate with Joi
-		const { error } = validateRecord(req.body)
+		const { error } = validateRecord(req.body);
 		if (error) return res.status(400).send(error.details[0].message);
 
-		console.log(req.body);
 		const record = new Record({
 			_id: req.body._id,
 			timeInTicks: req.body.timeInTicks,
@@ -47,7 +46,7 @@ router.post('/', async (req, res) => {
 			},
 			players: req.body.players,
 			rotation: req.body.rotation,
-			notes: req.body.notes
+			notes: req.body.notes,
 		});
 		await record.save();
 		res.send(record);

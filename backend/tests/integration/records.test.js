@@ -1,14 +1,14 @@
 import request from 'supertest';
 import mongoose from 'mongoose';
+import Record from '../../models/record.mjs';
 import server from '../../index.mjs';
-import Record from '../../models/records.mjs';
 server.close();
 
 const id1 = new mongoose.Types.ObjectId();
 const id2 = new mongoose.Types.ObjectId();
 
 // Sample records used for tests.
-const records = [
+let records = [
 	{
 		_id: id1,
 		timeInTicks: 666,
@@ -17,7 +17,7 @@ const records = [
 			hardmode: true,
 			teamSize: 1,
 		},
-		players: [{ _id: new mongoose.Types.ObjectId(), style: 'melee' }],
+		players: [{ playerId: new mongoose.Types.ObjectId(), style: 'melee' }],
 		rotation: 'Vitalis',
 		notes: 'test note',
 	},
@@ -29,7 +29,7 @@ const records = [
 			hardmode: false,
 			teamSize: 2,
 		},
-		players: [{ _id: mongoose.Types.ObjectId(), style: 'magic' }],
+		players: [{ playerId: mongoose.Types.ObjectId(), style: 'magic' }],
 		notes: 'test note 2',
 	},
 ];
@@ -85,11 +85,12 @@ describe('/api/records', () => {
 			const res = await request(server).get(`/api/records/${id1}`);
 
 			expect(res.status).toBe(200);
-			expect(res.body).toMatchObject(records[0]);
+			expect(res.body).toMatchObject({timeInTicks: 666});
 		});
 	});
 
 	describe('POST /', () => {
+
 		it('saves the record if it is valid', async () => {
 			const recordToSave = records[0];
 
@@ -100,7 +101,7 @@ describe('/api/records', () => {
 			const record = await Record.findOne({timeInTicks: 666});
 			expect(res.status).toBe(200);
 			expect(record).not.toBeNull();
-			expect(record).toMatchObject(records[0]);
+			expect(record).toMatchObject({timeInTicks: 666});
 		})
 
 		it('returns the record if it is valid', async () => {
@@ -112,7 +113,7 @@ describe('/api/records', () => {
 
 			expect(res.status).toBe(200);
 			expect(res.body).not.toBeNull();
-			expect(res.body).toMatchObject(records[0]);
+			expect(res.body).toMatchObject({timeInTicks: 666});
 		})
 
 		it('returns 400 if record is missing timeInTicks', async () => {
