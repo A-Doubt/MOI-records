@@ -4,6 +4,7 @@
 	box-sizing: border-box;
 	padding: 0;
 	margin: 0;
+	list-style-type: none;
 }
 
 body {
@@ -12,4 +13,25 @@ body {
 		sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	max-width: 1400px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+// Global classes
+
+.flex-row {
+	display: flex;
+	flex-direction: row;
+}
+
+.se {
+	justify-content: space-evenly;
+}
+
+
+// Header
+header {
+	padding: 40px;
+	font-size: 24px;
 }
