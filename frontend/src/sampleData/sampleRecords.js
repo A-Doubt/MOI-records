@@ -16,7 +16,7 @@ const sampleRecords = [
 			hardmode: false,
 			teamSize: 1,
 		},
-		players: [{ playerId: 1, style: 'melee' }],
+		players: [{ playerId: 1}],
 		notes: 'test note',
 	},
 	{
@@ -46,7 +46,7 @@ const sampleRecords = [
 			hardmode: false,
 			teamSize: 1,
 		},
-		players: [{ playerId: 1, style: 'ranged' }],
+		players: [{ playerId: 1}],
 		notes: 'test note',
 	},
 	{

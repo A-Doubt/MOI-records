@@ -19,6 +19,7 @@ const samplePlayers = [
 	{ name: '18 Player 18', _id: 18 },
 	{ name: '19 Player 19', _id: 19 },
 	{ name: '20 Player 20', _id: 20 },
+
 ];
 
 export default samplePlayers;

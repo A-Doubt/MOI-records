@@ -52,6 +52,18 @@ header {
 
 // ???
 
+form {
+	display: flex;
+	flex-direction: column;
+	width: 50vw;
+
+	input, select {
+		font-size: 1.2rem;
+		width: 300px;
+		height: 40px;
+	}
+}
+
 table {
 	display: block;
 	text-align: center;

@@ -1,10 +1,10 @@
-import samplePlayers from "../sampleData/samplePlayers";
+import samplePlayers from '../sampleData/samplePlayers';
+import Select from 'react-select'
 
 function RecordForm() {
-
 	const playersElements = samplePlayers.map((player) => {
-		return (<option value={player.name} key={player.name} >{player.name}</option>)
-	})
+		return <option value={player.name} key={player.name}></option>
+	});
 
 	return (
 		<form>
@@ -24,11 +24,14 @@ function RecordForm() {
 				<option value="4">4</option>
 				<option value="big">big</option>
 			</select>
-			<select id="player-name" name="player">
-				{playersElements}
-				<option value="test">Test</option>
-			</select>
-			<button type="submit" formAction="">BUTTON</button>
+			<label htmlFor="player-names">Player name</label>
+			<input list="player-name" name="player" id="player-names"/>
+				<datalist id="player-name">
+					{playersElements}
+				</datalist>
+			<button type="submit" formAction="">
+				BUTTON
+			</button>
 		</form>
 	);
 }
