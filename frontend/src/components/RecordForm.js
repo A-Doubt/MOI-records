@@ -9,7 +9,7 @@ function RecordForm() {
 	return (
 		<form>
 			<label htmlFor="boss-name">Boss name</label>
-			<select id="boss-name" name="boss-name">
+			<select id="boss-name" name="boname">
 				<option value="Ambassador">Ambassador</option>
 				<option value="Araxxi">Araxxi</option>
 				<option value="Kerapac">Kerapac</option>
@@ -17,7 +17,7 @@ function RecordForm() {
 			</select>
 
 			<label htmlFor="team-size">Team size</label>
-			<select id="team-size" name="team-size">
+			<select id="team-size" name="size">
 				<option value="1">1</option>
 				<option value="2">2</option>
 				<option value="3">3</option>

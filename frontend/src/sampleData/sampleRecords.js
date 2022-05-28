@@ -6,14 +6,14 @@ const sampleRecords = [
 			hardmode: true,
 			teamSize: 1,
 		},
-		players: [{ playerId: 1, style: 'melee' }],
+		players: [{ playerId: 1, style: 'melee' }, { playerId: 3, style: 'magic' }, { playerId: 5, style: 'ranged' }],
 		notes: 'test note',
 	},
 	{
 		timeInTicks: 222,
 		encounter: {
 			bossName: 'Ambassador',
-			hardmode: true,
+			hardmode: false,
 			teamSize: 1,
 		},
 		players: [{ playerId: 1, style: 'melee' }],
@@ -33,27 +33,27 @@ const sampleRecords = [
 		timeInTicks: 444,
 		encounter: {
 			bossName: 'Raksha',
-			hardmode: true,
+			hardmode: false,
 			teamSize: 1,
 		},
-		players: [{ playerId: 1, style: 'melee' }],
+		players: [{ playerId: 1, style: 'ranged' }],
 		notes: 'test note',
 	},
 	{
 		timeInTicks: 555,
 		encounter: {
 			bossName: 'Raksha',
-			hardmode: true,
+			hardmode: false,
 			teamSize: 1,
 		},
-		players: [{ playerId: 1, style: 'melee' }],
+		players: [{ playerId: 1, style: 'ranged' }],
 		notes: 'test note',
 	},
 	{
 		timeInTicks: 666,
 		encounter: {
 			bossName: 'Raksha',
-			hardmode: true,
+			hardmode: false,
 			teamSize: 1,
 		},
 		players: [{ playerId: 2, style: 'melee' }],
@@ -63,7 +63,7 @@ const sampleRecords = [
 		timeInTicks: 777,
 		encounter: {
 			bossName: 'Raksha',
-			hardmode: true,
+			hardmode: false,
 			teamSize: 1,
 		},
 		players: [{ playerId: 4, style: 'melee' }],
@@ -73,17 +73,17 @@ const sampleRecords = [
 		timeInTicks: 888,
 		encounter: {
 			bossName: 'Ambassador',
-			hardmode: true,
+			hardmode: false,
 			teamSize: 1,
 		},
-		players: [{ playerId: 12, style: 'melee' }],
+		players: [{ playerId: 12, style: 'ranged' }],
 		notes: 'test note',
 	},
 	{
 		timeInTicks: 999,
 		encounter: {
 			bossName: 'Ambassador',
-			hardmode: true,
+			hardmode: false,
 			teamSize: 1,
 		},
 		players: [{ playerId: 11, style: 'melee' }],
@@ -93,10 +93,10 @@ const sampleRecords = [
 		timeInTicks: 1111,
 		encounter: {
 			bossName: 'Araxxi',
-			hardmode: true,
+			hardmode: false,
 			teamSize: 1,
 		},
-		players: [{ playerId: 3, style: 'melee' }],
+		players: [{ playerId: 3, style: 'magic' }],
 		notes: 'test note',
 	}
 ];
