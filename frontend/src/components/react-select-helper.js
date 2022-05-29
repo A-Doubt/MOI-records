@@ -250,17 +250,13 @@ export const teamSizeInputOptions = [
 		label: '4-man',
 	},
 	{
-		value: 'big',
+		value: 'mass',
 		label: '5 or more',
 	},
 ];
 console.log(teamSizeInputOptions[0])
 // false stands form normalmode, true for hardmode
 export const modeInputOptions = [
-	{
-		value: '',
-		label: 'Any',
-	},
 	{
 		value: false,
 		label: 'Normal mode',
