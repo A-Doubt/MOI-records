@@ -16,6 +16,8 @@ body {
 	max-width: 1400px;
 	margin-left: auto;
 	margin-right: auto;
+	background-color: rgb(44, 42, 42);
+	color: white;
 }
 
 // Global classes
@@ -24,6 +26,7 @@ body {
 	display: flex;
 	flex-direction: row;
 }
+
 .centered {
 	justify-content: center;
 	align-items: center;
@@ -36,10 +39,12 @@ body {
 .spaced {
 	letter-spacing: 0.1rem;
 }
+
 .space {
 	display: flex;
 	flex-direction: column;
 }
+
 .style-icon {
 	width: 30px;
 }
@@ -57,7 +62,8 @@ form {
 	flex-direction: column;
 	width: 50vw;
 
-	input, select {
+	input,
+	select {
 		font-size: 1.2rem;
 		width: 300px;
 		height: 40px;
@@ -78,21 +84,27 @@ table {
 		color: white;
 		padding: 6px;
 	}
+
 	tr:nth-child(2n+1) {
 		background-color: #111c38;
 	}
+
 	tr:nth-child(2n) {
 		background-color: #03022e;
 	}
+
 	tr:nth-child(1) {
 		background-color: rgb(211, 187, 54);
 	}
+
 	tr:nth-child(2) {
 		background-color: silver;
 	}
+
 	tr:nth-child(3) {
 		background-color: brown;
 	}
+
 	td {
 		width: min(140, 10vw);
 		color: white;
