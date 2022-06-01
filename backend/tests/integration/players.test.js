@@ -26,6 +26,15 @@ describe('/api/players', () => {
 		await Player.deleteMany({});
 		server.close();
 	});
+	describe('Player model', () => {
+		it('finds a player by name', async () => {
+			Player.collection.insertMany([player1, player2]);
+
+			const player = await Player.findOne({ name: 'Player2Name' });
+			expect(player.name).toBe('Player2Name');
+		});
+	});
+
 	describe('GET /', () => {
 		it('gets all players', async () => {
 			Player.collection.insertMany([player1, player2]);
@@ -63,15 +72,43 @@ describe('/api/players', () => {
 			expect(res.body).toMatchObject({});
 		});
 
-		it("returns 404 if the provided ObjectId is not valid", async () => {
+		it('returns 404 if the provided ObjectId is not valid', async () => {
 			Player.collection.insertMany([player1, player2]);
 
-			const res = await request(server).get(
-				`/api/players/${1111}`
-			);
+			const res = await request(server).get(`/api/players/${1111}`);
 
 			expect(res.status).toBe(404);
 			expect(res.body).toMatchObject({});
+		});
+	});
+
+	describe('POST /', () => {
+		it('saves a player if it is valid', async () => {
+			const res = await request(server)
+				.post('/api/players')
+				.send({ name: 'player name' });
+
+			const player = await Player.findOne({ name: 'player name' })
+			expect(res.status).toBe(201);
+			expect(player).toMatchObject({ name: 'player name' })
+		});
+
+		it('returns a player if it is saved', async () => {
+			const res = await request(server)
+				.post('/api/players')
+				.send({ name: 'player name' })
+
+				expect(res.status).toBe(201);
+				expect(res.body).toMatchObject({ name: 'player name' })
+				expect(res.body._id).not.toBeNull();
+		});
+
+		it('returns 400 if player missing a name', async () => {
+			const res = await request(server)
+				.post('/api/players')
+				.send({ name: '' })
+
+			expect(res.status).toBe(400);
 		});
 	});
 });

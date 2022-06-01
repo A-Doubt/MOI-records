@@ -7,6 +7,12 @@ import { validateRecord } from '../models/record.mjs';
 const router = express.Router();
 
 router.get('/', async (req, res) => {
+	const query = {
+		bossName: req.query['boss-name'],
+		teamSize: req.query['team-size'],
+		hardmode: req.query.hardmode,
+	}
+	console.log(query);
 	try {
 		const records = await Record.find().sort('timeInTicks');
 		res.send(records);
@@ -49,7 +55,7 @@ router.post('/', async (req, res) => {
 			notes: req.body.notes,
 		});
 		await record.save();
-		res.send(record);
+		res.status(201).send(record);
 	} catch (err) {
 		res.status(500).send('something went wrong');
 		console.error(err.message);

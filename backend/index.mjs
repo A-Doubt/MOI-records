@@ -4,6 +4,8 @@ import records from './routes/records.mjs';
 import players from './routes/players.mjs';
 import bodyParser from 'body-parser';
 import config from 'config';
+import cors from 'cors';
+
 
 const app = express();
 const db = config.get('db');
@@ -12,6 +14,7 @@ mongoose
 	.then(console.log(`Connected to ${db}...`))
 	.catch((err) => console.error(err.message));
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use('/api/records', records);
 app.use('/api/players', players);

@@ -8,21 +8,20 @@ import {
 	customSelectTheme,
 } from './react-select-helper';
 
-function RecordForm() {
-	// control hidden inputs
-	const [bossNameInput, setBossNameInput] = React.useState('');
-	const [teamSizeInput, setTeamSizeInput] = React.useState('');
-	const [modeInput, setModeInput] = React.useState(false);
+export default function NewRecord() {
 
-	// control values within React-Select inputs
-	const [teamValue, setTeamValue] = React.useState('');
+	// hidden input (to make things easier to handle)
+	const [bossNameInput, setBossNameInput] = React.useState('');
+
+	// input values
 	const [modeValue, setModeValue] = React.useState('');
-	
-	// control options within React-Select inputs
+	const [teamValue, setTeamValue] = React.useState('');
+
+	// input options
 	const [teamOptions, setTeamOptions] = React.useState(teamSizeInputOptions);
 	const [modeOptions, setModeOptions] = React.useState(modeInputOptions);
 
-
+	// set the options on mode and teamsize when changing encounter name
 	React.useEffect(() => {
 		switch (bossNameInput) {
 			case 'Araxxi':
@@ -205,36 +204,28 @@ function RecordForm() {
 		}
 	}, [bossNameInput]);
 
-
+	// change the team size input when changing encounter name
 	React.useEffect(() => {
 		if (teamOptions.find((option) => option.value === 1)) {
 			console.log('CHANGING TO SOLO');
 			setTeamValue({ value: 1, label: 'Solo' });
-			setTeamSizeInput(1);
 		} else {
 			setTeamValue({ value: '', label: 'Any' });
-			setTeamSizeInput('')
 		}
 	}, [teamOptions]);
 
-	// If switching from a boss that has hardmode to a one with only
-	// normal mode force to change the mode input to Normal mode.
-	React.useEffect(() => {
-		if (!modeOptions.find((option) => option.value === true)) {
-			console.log('CHANGING TO NM');
-			setModeValue({ value: false, label: 'Normal mode' });
-			setModeInput(false);
-		}
-	}, [modeOptions]);
-
-
-	// Handlers
-	function handleBossNameChange(e) {
+	function handleBossChange(e) {
 		setBossNameInput(e.value);
 	}
 
+	function handleModeChange(e) {
+		setModeValue({
+			value: e.value,
+			label: e.value ? 'Hard mode' : 'Normal mode',
+		});
+	}
+
 	function handleTeamChange(e) {
-		setTeamSizeInput(e.value);
 		let label;
 		if (e.value === 1) label = 'Solo';
 		else if (e.value === 2) label = 'Duo';
@@ -249,62 +240,84 @@ function RecordForm() {
 		console.log('e.value: ', e.value, 'label: ', label);
 	}
 
-	function handleModeChange(e) {
-		setModeInput(e.value);
-		setModeValue({
-			value: e.value,
-			label: e.value ? 'Hard mode' : 'Normal mode',
-		});
-	}
 
-	async function handleSubmit(e) {
-		console.log(`bossNameInput: ${bossNameInput}`)
-		console.log(`teamSizeInput: ${teamSizeInput}`)
-		console.log(`modeInput: ${modeInput}`)
-		e.preventDefault();
-		try {
-			const res = await axios.get(
-				`http://localhost:3000/API/records/?boss-name=${bossNameInput}&team-size=${teamSizeInput}&hardmode=${modeInput}`
-			);
-			console.log(res.data);
-		} catch (err) {
-			console.error(err)
+	// If switching from a boss that has hardmode to a one with only
+	// normal mode force to change the mode input to Normal mode.
+	React.useEffect(() => {
+		if (!modeOptions.find((option) => option.value === true)) {
+			console.log('CHANGING TO NM');
+			setModeValue({ value: false, label: 'Normal mode' });
 		}
+	}, [modeOptions]);
+
+
+
+	function handleSubmit(e) {
+		console.log(e);
+		e.preventDefault();
+		console.log('submited');
 	}
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<label htmlFor="boss-name">Boss name</label>
-			<Select
-				options={bossNameInputOptions}
-				onChange={handleBossNameChange}
-				inputId="boss-name"
-				styles={customSelectTheme}
-			/>
-			<input type="hidden" value={bossNameInput} name="boss-name" />
+		<>
+			<h1>Add a new Record here</h1>
+			<form onSubmit={handleSubmit}>
+				<label htmlFor="boss-name">Encouter name</label>
+				<Select
+					options={bossNameInputOptions}
+					onChange={handleBossChange}
+					inputId="boss-name"
+					styles={customSelectTheme}
+				/>
+				<input type="hidden" value={bossNameInput} name="boss-name" />
 
-			<label htmlFor="size">Team size</label>
-			<Select
-				options={teamOptions}
-				onChange={handleTeamChange}
-				inputId="team-size"
-				styles={customSelectTheme}
-				value={teamValue}
-			/>
-			<input type="hidden" value={teamSizeInput} name="team-size" />
+				{bossNameInput && (
+					<>
+						<label htmlFor="mode">Mode</label>
+						<Select
+							options={modeOptions}
+							onChange={handleModeChange}
+							inputId="mode"
+							styles={customSelectTheme}
+							value={modeValue}
+						/>
+					</>
+				)}
+				{bossNameInput && (
+					<>
+						<label htmlFor="team">Team size</label>
+						<Select
+							options={teamOptions}
+							onChange={handleTeamChange}
+							inputId="team"
+							styles={customSelectTheme}
+							value={teamValue}
+						/>
+					</>
+				)}
 
-			<label htmlFor="hardmode">Mode</label>
-			<Select
-				options={modeOptions}
-				onChange={handleModeChange}
-				inputId="hardmode"
-				styles={customSelectTheme}
-				value={modeValue}
-			/>
-			<input type="hidden" value={modeInput} name="hardmode" />
-			<button type="submit">Submit</button>
-		</form>
+				<fieldset>
+					<legend>Encounter time</legend>
+					<label htmlFor="minutes">Minutes</label>
+					<input
+						type="number"
+						id="minutes"
+						name="minutes"
+						min={0}
+						max={59}
+					/>
+					<label htmlFor="seconds">Seconds</label>
+					<input
+						type="number"
+						id="seconds"
+						name="seconds"
+						min={0}
+						max={59.4}
+						step={0.6}
+					/>
+				</fieldset>
+				<button type="submit">Submit a new record</button>
+			</form>
+		</>
 	);
 }
-
-export default RecordForm;

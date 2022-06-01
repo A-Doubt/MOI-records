@@ -99,7 +99,7 @@ describe('/api/records', () => {
 				.send(recordToSave);
 
 			const record = await Record.findOne({timeInTicks: 666});
-			expect(res.status).toBe(200);
+			expect(res.status).toBe(201);
 			expect(record).not.toBeNull();
 			expect(record).toMatchObject({timeInTicks: 666});
 		})
@@ -111,7 +111,7 @@ describe('/api/records', () => {
 				.post('/api/records')
 				.send(recordToSave);
 
-			expect(res.status).toBe(200);
+			expect(res.status).toBe(201);
 			expect(res.body).not.toBeNull();
 			expect(res.body).toMatchObject({timeInTicks: 666});
 		})
