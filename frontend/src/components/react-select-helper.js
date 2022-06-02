@@ -1,10 +1,9 @@
-
 export const customSelectTheme = {
 	container: (provided, state) => {
 		return {
 			...provided,
 			width: 340,
-		}
+		};
 	},
 	option: (provided, state) => {
 		return {
@@ -18,7 +17,7 @@ export const customSelectTheme = {
 				backgroundColor: '#b8bfcc',
 				color: 'black',
 			},
-		}
+		};
 	},
 	menuList: (provided, state) => {
 		return {
@@ -26,7 +25,7 @@ export const customSelectTheme = {
 			padding: 0,
 			marginTop: -6,
 			boxShadow: '0 0 0 2px darkblue',
-		}
+		};
 	},
 	singleValue: (provided, state) => {
 		return { ...provided, color: 'white', backgroundColor: 'black' };
@@ -36,7 +35,7 @@ export const customSelectTheme = {
 			...provided,
 			backgroundColor: 'black',
 			color: 'white',
-		}
+		};
 	},
 	control: (provided, state) => {
 		return {
@@ -46,8 +45,10 @@ export const customSelectTheme = {
 			border: 0,
 			borderRadius: 0,
 			cursor: 'pointer',
-			boxShadow: state.menuIsOpen ? '0 0 0 2px darkblue' : '0 0 0 1px darkgrey',
-		}
+			boxShadow: state.menuIsOpen
+				? '0 0 0 2px darkblue'
+				: '0 0 0 1px darkgrey',
+		};
 	},
 	dropdownIndicator: (provided, state) => {
 		return {
@@ -55,19 +56,19 @@ export const customSelectTheme = {
 			cursor: 'pointer',
 			backgroundColor: 'black',
 			color: 'white',
-		}
+		};
 	},
 	indicatorSeparator: (provided, state) => {
 		return {
 			...provided,
 			backgroundColor: 'white',
-		}
+		};
 	},
 	input: (provided, state) => {
 		return {
 			...provided,
 			color: 'white',
-		}
+		};
 	},
 };
 export const bossNameInputOptions = [
@@ -254,7 +255,7 @@ export const teamSizeInputOptions = [
 		label: '5 or more',
 	},
 ];
-console.log(teamSizeInputOptions[0])
+console.log(teamSizeInputOptions[0]);
 // false stands form normalmode, true for hardmode
 export const modeInputOptions = [
 	{
@@ -264,5 +265,36 @@ export const modeInputOptions = [
 	{
 		value: true,
 		label: 'Hard mode',
+	},
+];
+
+export const voragoRotationOptions = [
+	{
+		value: 'N/A',
+		label: 'N/A',
+	},
+	{
+		value: 'Ceiling collapse',
+		label: 'Ceiling collapse',
+	},
+	{
+		value: 'Scopulus',
+		label: 'Scopulus',
+	},
+	{
+		value: 'Vitalis',
+		label: 'Vitalis',
+	},
+	{
+		value: 'Green Bomb',
+		label: 'Green Bomb',
+	},
+	{
+		value: 'Team Split',
+		label: 'Team Split',
+	},
+	{
+		value: 'The End',
+		label: 'The End',
 	},
 ];

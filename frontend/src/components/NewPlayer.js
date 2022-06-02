@@ -12,7 +12,7 @@ export default function NewPlayer() {
 			setErrMessage('');
 			const body = { name: nameInput };
 			const res = await axios({
-				url: 'http://localhost:3000/API/players',
+				url: 'http://localhost:3000/api/players',
 				data: body,
 				method: 'post',
 			});

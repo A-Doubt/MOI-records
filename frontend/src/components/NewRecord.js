@@ -6,20 +6,44 @@ import {
 	teamSizeInputOptions,
 	modeInputOptions,
 	customSelectTheme,
+	voragoRotationOptions,
 } from './react-select-helper';
+import timeToTicks from '../services/timeToTicks';
 
 export default function NewRecord() {
-
 	// hidden input (to make things easier to handle)
 	const [bossNameInput, setBossNameInput] = React.useState('');
 
 	// input values
+	const [minutesValue, setMinutesValue] = React.useState('')
+	const [secondsValue, setSecondsValue] = React.useState('')
+
 	const [modeValue, setModeValue] = React.useState('');
 	const [teamValue, setTeamValue] = React.useState('');
+	const [rotationValue, setRotationValue] = React.useState({
+		label: 'N/A',
+		value: 'N/A',
+	});
+	const [playersValue, setPlayersValue] = React.useState('');
 
 	// input options
-	const [teamOptions, setTeamOptions] = React.useState(teamSizeInputOptions);
 	const [modeOptions, setModeOptions] = React.useState(modeInputOptions);
+	const [teamOptions, setTeamOptions] = React.useState(teamSizeInputOptions);
+	const [playersOptions, setPlayersOptions] = React.useState(['']);
+
+
+	React.useEffect(() => {
+		const players = [];
+
+		async function fetchData() {
+			const data = await axios.get('http://localhost:3000/api/players');
+			data.data.forEach((player) => {
+				players.push({ label: player.name, value: player._id });
+			});
+			setPlayersOptions(players);
+		}
+		fetchData();
+	}, []);
 
 	// set the options on mode and teamsize when changing encounter name
 	React.useEffect(() => {
@@ -28,7 +52,6 @@ export default function NewRecord() {
 			case 'Nex':
 			case 'Raksha':
 				setTeamOptions([
-					teamSizeInputOptions[0],
 					teamSizeInputOptions[1],
 					teamSizeInputOptions[2],
 				]);
@@ -102,7 +125,6 @@ export default function NewRecord() {
 			case 'Taraket the Necromancer':
 			case 'The Ambassador':
 				setTeamOptions([
-					teamSizeInputOptions[0],
 					teamSizeInputOptions[1],
 					teamSizeInputOptions[2],
 					teamSizeInputOptions[3],
@@ -118,7 +140,6 @@ export default function NewRecord() {
 
 			case 'Kalphite King':
 				setTeamOptions([
-					teamSizeInputOptions[0],
 					teamSizeInputOptions[1],
 					teamSizeInputOptions[2],
 					teamSizeInputOptions[3],
@@ -136,7 +157,6 @@ export default function NewRecord() {
 
 			case 'Kerapac':
 				setTeamOptions([
-					teamSizeInputOptions[0],
 					teamSizeInputOptions[1],
 					teamSizeInputOptions[2],
 					teamSizeInputOptions[3],
@@ -163,7 +183,6 @@ export default function NewRecord() {
 				break;
 			case 'Solak':
 				setTeamOptions([
-					teamSizeInputOptions[0],
 					teamSizeInputOptions[2],
 					teamSizeInputOptions[3],
 					teamSizeInputOptions[4],
@@ -179,7 +198,6 @@ export default function NewRecord() {
 				break;
 			case 'Vorago':
 				setTeamOptions([
-					teamSizeInputOptions[0],
 					teamSizeInputOptions[1],
 					teamSizeInputOptions[2],
 					teamSizeInputOptions[3],
@@ -207,8 +225,9 @@ export default function NewRecord() {
 	// change the team size input when changing encounter name
 	React.useEffect(() => {
 		if (teamOptions.find((option) => option.value === 1)) {
-			console.log('CHANGING TO SOLO');
 			setTeamValue({ value: 1, label: 'Solo' });
+		} else if (bossNameInput === 'Beastmaster Durzag' || bossNameInput === 'Yakamaru' || bossNameInput === 'Nex - Angel of Death') {
+			setTeamValue({ value: 'mass', label: '5 or more' })
 		} else {
 			setTeamValue({ value: '', label: 'Any' });
 		}
@@ -216,6 +235,8 @@ export default function NewRecord() {
 
 	function handleBossChange(e) {
 		setBossNameInput(e.value);
+		setPlayersValue('');
+		setRotationValue('');
 	}
 
 	function handleModeChange(e) {
@@ -237,9 +258,12 @@ export default function NewRecord() {
 			value: e.value,
 			label: label,
 		});
-		console.log('e.value: ', e.value, 'label: ', label);
+		setPlayersValue('');
 	}
 
+	function handlePlayersChange(e) {
+		setPlayersValue(e);
+	}
 
 	// If switching from a boss that has hardmode to a one with only
 	// normal mode force to change the mode input to Normal mode.
@@ -250,12 +274,46 @@ export default function NewRecord() {
 		}
 	}, [modeOptions]);
 
-
-
-	function handleSubmit(e) {
-		console.log(e);
+	
+	function handleAllowedTeamSize() {
+		let teamSize;
+		if (teamValue.value === 'mass') teamSize = 10;
+		else teamSize = teamValue.value;
+		if (bossNameInput === 'Nex - Angel of Death') teamSize = 7;
+		return playersValue.length >= teamSize || playersValue.length >= 10;
+	}
+	
+	async function handleSubmit(e) {
 		e.preventDefault();
-		console.log('submited');
+		
+		const players = [];
+		playersValue.forEach((player) => {
+			players.push({playerId: player.value});
+		})
+		console.log("🚀 ~ file: NewRecord.js ~ line 290 ~ handleSubmit ~ players", players[0])
+		const body = {
+			timeInTicks: timeToTicks(minutesValue, secondsValue),
+			encounter: {
+				bossName: bossNameInput,
+				hardmode: modeValue.value,
+				teamSize: teamValue.value,
+			},
+			players: players,
+			rotation: rotationValue.value,
+		}
+        console.log("🚀handleSubmit ~ body", body)
+		try {
+			const res = await axios({
+				url: 'http://localhost:3000/api/records',
+				data: body,
+				method: 'post',
+			});
+			const data = res.data;
+			console.log(data);
+			return data;
+		} catch(err) {
+			console.log(err.response);
+		}
 	}
 
 	return (
@@ -296,6 +354,24 @@ export default function NewRecord() {
 					</>
 				)}
 
+				{bossNameInput === 'Vorago' && (
+					<>
+						<label htmlFor="team">Vorago rotation</label>
+						<Select
+							options={voragoRotationOptions}
+							inputId="rotation"
+							styles={customSelectTheme}
+							value={rotationValue}
+							onChange={(e) =>
+								setRotationValue({
+									value: e.value,
+									label: e.value,
+								})
+							}
+						/>
+					</>
+				)}
+
 				<fieldset>
 					<legend>Encounter time</legend>
 					<label htmlFor="minutes">Minutes</label>
@@ -305,6 +381,8 @@ export default function NewRecord() {
 						name="minutes"
 						min={0}
 						max={59}
+						value={minutesValue}
+						onChange={(e) => setMinutesValue(e.target.value)}
 					/>
 					<label htmlFor="seconds">Seconds</label>
 					<input
@@ -314,8 +392,22 @@ export default function NewRecord() {
 						min={0}
 						max={59.4}
 						step={0.6}
+						value={secondsValue}
+						onChange={(e) => setSecondsValue(e.target.value)}
 					/>
 				</fieldset>
+
+				<label htmlFor="team">Players</label>
+				<Select
+					options={playersOptions}
+					onChange={handlePlayersChange}
+					inputId="players"
+					styles={customSelectTheme}
+					value={playersValue}
+					isMulti
+					isOptionDisabled={handleAllowedTeamSize}
+				/>
+
 				<button type="submit">Submit a new record</button>
 			</form>
 		</>
