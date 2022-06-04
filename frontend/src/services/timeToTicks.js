@@ -1,4 +1,6 @@
 export default function timeToTicks(minutes, seconds) {
+    console.log("🚀 ~ file: timeToTicks.js ~ line 2 ~ timeToTicks ~ seconds", seconds)
+    console.log("🚀 ~ file: timeToTicks.js ~ line 2 ~ timeToTicks ~ minutes", minutes)
 	const totalSeconds = parseInt(minutes) * 60 + parseInt(seconds)
 	return parseInt((totalSeconds / 0.6).toFixed(0));
 }

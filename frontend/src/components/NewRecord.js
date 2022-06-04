@@ -9,8 +9,11 @@ import {
 	voragoRotationOptions,
 } from './react-select-helper';
 import timeToTicks from '../services/timeToTicks';
+import { useNavigate } from 'react-router-dom';
 
 export default function NewRecord() {
+	const navigate = useNavigate();
+
 	// hidden input (to make things easier to handle)
 	const [bossNameInput, setBossNameInput] = React.useState('');
 
@@ -30,6 +33,9 @@ export default function NewRecord() {
 	const [modeOptions, setModeOptions] = React.useState(modeInputOptions);
 	const [teamOptions, setTeamOptions] = React.useState(teamSizeInputOptions);
 	const [playersOptions, setPlayersOptions] = React.useState(['']);
+
+	// errors
+	const [errorMessage, setErrorMessage] = React.useState('');
 
 
 	React.useEffect(() => {
@@ -285,7 +291,8 @@ export default function NewRecord() {
 	
 	async function handleSubmit(e) {
 		e.preventDefault();
-		
+		setErrorMessage('')
+		if (!playersValue) return setErrorMessage('Pick at least 1 player!')
 		const players = [];
 		playersValue.forEach((player) => {
 			players.push({playerId: player.value});
@@ -310,8 +317,11 @@ export default function NewRecord() {
 			});
 			const data = res.data;
 			console.log(data);
+
+			navigate('/records');
 			return data;
 		} catch(err) {
+			setErrorMessage(err.response.data);
 			console.log(err.response);
 		}
 	}
@@ -410,6 +420,7 @@ export default function NewRecord() {
 
 				<button type="submit">Submit a new record</button>
 			</form>
+			{errorMessage && <p>{errorMessage}</p>}
 		</>
 	);
 }
