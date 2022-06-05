@@ -12,13 +12,13 @@ let records = [
 	{
 		_id: id1,
 		timeInTicks: 666,
+		dateKilled: new Date(),
 		encounter: {
 			bossName: 'Vorago',
 			hardmode: true,
 			teamSize: 1,
 		},
 		players: [{ playerId: new mongoose.Types.ObjectId(), style: 'melee' }],
-		rotation: 'Vitalis',
 		notes: 'test note',
 	},
 	{

@@ -6,9 +6,11 @@ import {
 import Select from 'react-select';
 import axios from 'axios';
 // import _ from 'lodash';
-import timeToTicks from '../services/timeToTicks'
+import timeToTicks from '../services/timeToTicks';
 
 export default function NewRecord() {
+	const [errorMessage, setErrorMessage] = React.useState('');
+
 	const [fetchedPlayers, setFetchedPlayers] = React.useState([]);
 	const [playersValues, setPlayersValues] = React.useState([]);
 	const [playersOptions, setPlayersOptions] = React.useState([]);
@@ -35,6 +37,7 @@ export default function NewRecord() {
 		minutes: '',
 		seconds: '',
 		notes: '',
+		dateKilled: '',
 	});
 	const [inputOptions, setInputOptions] = React.useState({
 		bosses: {},
@@ -173,23 +176,20 @@ export default function NewRecord() {
 		// console.log(playersOptions);
 	}, [playersChange]);
 
-
-
-
-
-
-
 	async function handleSubmit(e) {
-		console.log(inputValues);
 		e.preventDefault();
-		if (!playersInputs.length) console.log('Pick at least 1 player!')
+		setErrorMessage('');
+		if (!inputValues.boss.value) return setErrorMessage('Pick a boss');
+		console.log(inputValues);
 
 		const players = [];
 		playersValues.forEach((player) => {
-			players.push({playerId: player.value});
-		})
+			players.push({ playerId: player.value });
+		});
 
-		if (!players.length) return console.log('Choose at least 1 player!')
+		if (!players.length)
+			return setErrorMessage('Choose at least 1 player!');
+
 		const body = {
 			timeInTicks: timeToTicks(inputValues.minutes, inputValues.seconds),
 			encounter: {
@@ -198,8 +198,11 @@ export default function NewRecord() {
 				teamSize: inputValues.size.value,
 			},
 			players: players,
-		}
-        console.log("🚀handleSubmit ~ body", body)
+			dateKilled: new Date(inputValues.dateKilled),
+			notes: inputValues.notes ? inputValues.notes : 'none',
+		};
+
+		console.log('🚀handleSubmit ~ body', body);
 		try {
 			const res = await axios({
 				url: 'http://localhost:3000/api/records',
@@ -209,26 +212,24 @@ export default function NewRecord() {
 			const data = res.data;
 			console.log(data);
 
+
 			return data;
-		} catch(err) {
+		} catch (err) {
+			console.log(err)
 			console.log(err.response);
+			setErrorMessage(err.response.data);
 		}
 	}
 
-
-
-
-
-
-
-
 	return (
 		<>
-			<h1>Add a new Record here</h1>
-			<form
-				onSubmit={handleSubmit}
-				className="flex-column"
-			>
+			{errorMessage ? (
+				<h1 className="error">{errorMessage}</h1>
+			) : (
+				<h1>Add a new Record here</h1>
+			)}
+
+			<form onSubmit={handleSubmit} className="flex-column">
 				<div className="container flex-row">
 					<div className="form-inputs--container">
 						<Select
@@ -285,6 +286,7 @@ export default function NewRecord() {
 					</div>
 				</div>
 				<input
+					className="input-dark"
 					type="number"
 					id="minutes"
 					name="minutes"
@@ -302,6 +304,7 @@ export default function NewRecord() {
 					}}
 				/>
 				<input
+					className="input-dark"
 					type="number"
 					id="seconds"
 					name="seconds"
@@ -310,7 +313,6 @@ export default function NewRecord() {
 					step={0.6}
 					placeholder="time(seconds)"
 					value={inputValues.seconds}
-					pattern="\d*"
 					onChange={(e) => {
 						if (e.target.value > 59.4) e.target.value = 59.4;
 						if (e.target.value < 0) e.target.value = 0;
@@ -319,8 +321,11 @@ export default function NewRecord() {
 							seconds: e.target.value,
 						});
 					}}
+					required
 				/>
+				<label htmlFor="notes">Additional notes</label>
 				<textarea
+					className="input-dark"
 					value={inputValues.notes}
 					onChange={(e) =>
 						setInputValues({
@@ -329,6 +334,21 @@ export default function NewRecord() {
 						})
 					}
 					maxLength={100}
+					id="notes"
+					name="notes"
+				/>
+
+				<label htmlFor="date">Date killed</label>
+				<input
+					type="date"
+					required
+					className="input-dark"
+					onChange={(e) => {
+						setInputValues({
+							...inputValues,
+							dateKilled: e.target.value,
+						});
+					}}
 				/>
 
 				<button type="submit">Submit</button>

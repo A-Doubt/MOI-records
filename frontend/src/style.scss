@@ -43,6 +43,10 @@ a {
 	justify-content: space-between;
 }
 
+.error {
+	color: red;
+}
+
 .spaced {
 	letter-spacing: 0.1rem;
 }
@@ -85,6 +89,15 @@ form {
 			height: 30px;
 			width: 50px;
 		}
+	}
+
+	.input-dark {
+		background-color: black;
+		color: white;
+	}
+
+	::-webkit-calendar-picker-indicator {
+		filter: invert(1);
 	}
 }
 

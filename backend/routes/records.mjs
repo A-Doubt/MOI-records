@@ -1,8 +1,10 @@
 import express from 'express';
 import Record from '../models/record.mjs';
+import Player from '../models/player.mjs';
 import mongoose from 'mongoose';
 import validateObjectId from '../middleware/validateObjectId.mjs';
 import { validateRecord } from '../models/record.mjs';
+import Fawn from 'fawn'
 
 const router = express.Router();
 
@@ -51,11 +53,34 @@ router.post('/', async (req, res) => {
 				teamSize: req.body.encounter.teamSize,
 			},
 			players: req.body.players,
-			rotation: req.body.rotation,
-			notes: req.body.notes,
+			dateKilled: req.body.dateKilled,
+			dateAdded: new Date(),
+			notes: req.body.notes ? req.body.notes : '',
 		});
-		await record.save();
+		console.log(record._id)
+		console.log(record.players[0].playerId)
+
+
+		let task = Fawn.Task()
+		task.save('records', record);
+
+		for (let i = 0; i < record.players.length; i++) {
+
+			let player = await Player.findById(record.players[i].playerId)
+			console.log(player)
+
+			task = task.update(
+				'players', {
+					_id: record.players[i].playerId
+				}, {
+					'$push': { records: record._id }
+				}
+			)
+		}
+		task.run();
+
 		res.status(201).send(record);
+		
 	} catch (err) {
 		res.status(500).send('something went wrong');
 		console.error(err.message);

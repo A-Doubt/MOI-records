@@ -46,4 +46,23 @@ router.post('/', async (req, res) => {
 	}
 });
 
+router.put('/:id', async (req, res) => {
+	console.log(req.body)
+	try {
+		const player = await Player.findByIdAndUpdate(
+			req.params.id,
+			{
+				name: req.body.name,
+				records: req.body.records,
+			},
+			{ new: true }
+		);
+		console.log('player updated: ', player);
+		res.send(player);
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send(err.message);
+	}
+})
+
 export default router;

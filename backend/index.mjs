@@ -5,6 +5,7 @@ import players from './routes/players.mjs';
 import bodyParser from 'body-parser';
 import config from 'config';
 import cors from 'cors';
+import Fawn from 'fawn';
 
 
 const app = express();
@@ -14,14 +15,16 @@ mongoose
 	.then(console.log(`Connected to ${db}...`))
 	.catch((err) => console.error(err.message));
 
-app.use(cors());
-app.use(bodyParser.json());
-app.use('/api/records', records);
-app.use('/api/players', players);
-
-app.get('/', (req, res) => {
-	res.send('Hello there, General Kenobi!');
-});
+Fawn.init(db);
+	
+	app.use(cors());
+	app.use(bodyParser.json());
+	app.use('/api/records', records);
+	app.use('/api/players', players);
+	
+	app.get('/', (req, res) => {
+		res.send('Hello there, General Kenobi!');
+	});
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {

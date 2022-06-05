@@ -39,14 +39,8 @@ const recordSchema = new mongoose.Schema({
 		min: 0,
 		max: 6000,
 	},
-	rotation: {
-		type: String,
-		minlength: 1,
-		maxlength: 255,
-	},
 	notes: {
 		type: String,
-		minlength: 3,
 		maxlength: 1000,
 	},
 	players: [
@@ -80,8 +74,7 @@ function validateRecord(record) {
 			teamSize: Joi.number().min(1).max(10).required(),
 		}),
 		timeInTicks: Joi.number().min(0).max(6000).required(),
-		rotation: Joi.string().min(1).max(255),
-		notes: Joi.string().min(3).max(1000),
+		notes: Joi.string().max(1000).optional(),
 		players: Joi.array().items(
 			Joi.object().keys({
 				playerId: objectId().required(),
@@ -91,25 +84,6 @@ function validateRecord(record) {
 	});
 	return schema.validate(record);
 }
-
-
-// const record = new Record({
-// 	timeInTicks: 666,
-// 	encounter: {
-// 		bossName: 'Vorago',
-// 		hardmode: true,
-// 		teamSize: 1,
-// 	},
-// 	players: [{ playerId: new mongoose.Types.ObjectId(), style: 'melee' }],
-// 	rotation: 'Vitalis',
-// 	notes: 'test note',
-// })
-// async function saveRecord() {
-// 	await record.save();
-// 	console.log('record saved');
-// }
-// saveRecord()
-
 
 export default Record;
 export { validateRecord };

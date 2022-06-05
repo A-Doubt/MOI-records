@@ -6,11 +6,14 @@ server.close();
 
 const id1 = new mongoose.Types.ObjectId();
 const id2 = new mongoose.Types.ObjectId();
+const recordId1 = new mongoose.Types.ObjectId();
+const recordId2 = new mongoose.Types.ObjectId();
+
 
 const player1 = new Player({
 	_id: id1,
 	name: 'Player1Name',
-	records: [],
+	records: [recordId1, recordId2],
 });
 const player2 = new Player({
 	_id: id2,
@@ -109,6 +112,33 @@ describe('/api/players', () => {
 				.send({ name: '' })
 
 			expect(res.status).toBe(400);
+		});
+	});
+
+	describe('PUT /', () => {
+		it('updates a player\'s name', async () => {
+			Player.collection.insertOne(player1);
+
+			const res = await request(server)
+				.put(`/api/players/${id1}`)
+				.send({ name: 'updated name' })
+
+			expect(res.body.name).toBe('updated name');
+			expect(res.status).toBe(200);
+		})
+
+		it('adds a new record into the player entry', async () => {
+
+			const recordId = new mongoose.Types.ObjectId();
+			Player.collection.insertOne(player1);
+
+			const res = await request(server)
+				.put(`/api/players/${id1}`)
+				.send({...player1, records: [...player1.records, recordId]})
+
+			expect(res.body.records.length).toBe(3);
+			expect(res.body.records).toContain(recordId.toHexString());
+			expect(res.body.records).not.toContain(undefined);
 		});
 	});
 });
