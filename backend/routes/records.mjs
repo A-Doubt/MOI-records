@@ -4,19 +4,25 @@ import Player from '../models/player.mjs';
 import mongoose from 'mongoose';
 import validateObjectId from '../middleware/validateObjectId.mjs';
 import { validateRecord } from '../models/record.mjs';
-import Fawn from 'fawn'
+import Fawn from 'fawn';
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
 	const query = {
-		bossName: req.query['boss-name'],
-		teamSize: req.query['team-size'],
-		hardmode: req.query.hardmode,
-	}
+		encounter: {
+			bossName: req.query['boss-name'],
+			hardmode: req.query.hardmode === 'true' ? true : false,
+			teamSize: parseInt(req.query['team-size']),
+		},
+	};
 	console.log(query);
+	console.log('GET /');
 	try {
-		const records = await Record.find().sort('timeInTicks');
+		const records = await Record.find(query)
+			.sort('timeInTicks')
+			.populate('players.playerId');
+		console.log(records);
 		res.send(records);
 	} catch (err) {
 		res.status(500).send('something went wrong');
@@ -57,30 +63,29 @@ router.post('/', async (req, res) => {
 			dateAdded: new Date(),
 			notes: req.body.notes ? req.body.notes : '',
 		});
-		console.log(record._id)
-		console.log(record.players[0].playerId)
+		console.log(record._id);
+		console.log(record.players[0].playerId);
 
-
-		let task = Fawn.Task()
+		let task = Fawn.Task();
 		task.save('records', record);
 
 		for (let i = 0; i < record.players.length; i++) {
-
-			let player = await Player.findById(record.players[i].playerId)
-			console.log(player)
+			let player = await Player.findById(record.players[i].playerId);
+			console.log(player);
 
 			task = task.update(
-				'players', {
-					_id: record.players[i].playerId
-				}, {
-					'$push': { records: record._id }
+				'players',
+				{
+					_id: record.players[i].playerId,
+				},
+				{
+					$push: { records: record._id },
 				}
-			)
+			);
 		}
 		task.run();
 
 		res.status(201).send(record);
-		
 	} catch (err) {
 		res.status(500).send('something went wrong');
 		console.error(err.message);

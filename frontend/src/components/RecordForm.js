@@ -8,7 +8,7 @@ import {
 	customSelectTheme,
 } from './react-select-helper';
 
-function RecordForm() {
+function RecordForm(props) {
 	// control hidden inputs
 	const [bossNameInput, setBossNameInput] = React.useState('');
 	const [teamSizeInput, setTeamSizeInput] = React.useState('');
@@ -17,11 +17,10 @@ function RecordForm() {
 	// control values within React-Select inputs
 	const [teamValue, setTeamValue] = React.useState('');
 	const [modeValue, setModeValue] = React.useState('');
-	
+
 	// control options within React-Select inputs
 	const [teamOptions, setTeamOptions] = React.useState(teamSizeInputOptions);
 	const [modeOptions, setModeOptions] = React.useState(modeInputOptions);
-
 
 	React.useEffect(() => {
 		switch (bossNameInput) {
@@ -205,7 +204,6 @@ function RecordForm() {
 		}
 	}, [bossNameInput]);
 
-
 	React.useEffect(() => {
 		if (teamOptions.find((option) => option.value === 1)) {
 			console.log('CHANGING TO SOLO');
@@ -213,7 +211,7 @@ function RecordForm() {
 			setTeamSizeInput(1);
 		} else {
 			setTeamValue({ value: '', label: 'Any' });
-			setTeamSizeInput('')
+			setTeamSizeInput('');
 		}
 	}, [teamOptions]);
 
@@ -226,7 +224,6 @@ function RecordForm() {
 			setModeInput(false);
 		}
 	}, [modeOptions]);
-
 
 	// Handlers
 	function handleBossNameChange(e) {
@@ -258,18 +255,12 @@ function RecordForm() {
 	}
 
 	async function handleSubmit(e) {
-		console.log(`bossNameInput: ${bossNameInput}`)
-		console.log(`teamSizeInput: ${teamSizeInput}`)
-		console.log(`modeInput: ${modeInput}`)
 		e.preventDefault();
-		try {
-			const res = await axios.get(
-				`http://localhost:3000/API/records/?boss-name=${bossNameInput}&team-size=${teamSizeInput}&hardmode=${modeInput}`
-			);
-			console.log(res.data);
-		} catch (err) {
-			console.error(err)
-		}
+		props.handleSubmit({
+			bossName: bossNameInput,
+			teamSize: teamSizeInput,
+			hardmode: modeInput,
+		});
 	}
 
 	return (
