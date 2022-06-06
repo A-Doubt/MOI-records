@@ -16,11 +16,15 @@ router.get('/', async (req, res) => {
 			teamSize: parseInt(req.query['team-size']),
 		},
 	};
+
+	const sort = req.query.sort;
+
+	console.log(sort);
 	console.log(query);
 	console.log('GET /');
 	try {
 		const records = await Record.find(query)
-			.sort('timeInTicks')
+			.sort(sort)
 			.populate('players.playerId');
 		console.log(records);
 		res.send(records);
