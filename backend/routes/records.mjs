@@ -8,6 +8,28 @@ import Fawn from 'fawn';
 
 const router = express.Router();
 
+router.get('/sort', async (req, res) => {
+	console.log(req.query)
+	try {
+		const records = await Record.find({})
+			.sort({dateAdded: -1})
+			.populate('players.playerId')
+			.limit(20);
+		res.send(records);
+	} catch(err) {
+		console.error(err.message);
+	}
+})
+
+router.get('/count', async (req, res) => {
+	try {
+		const numberOfRecords = await Record.find({}).count();
+		res.send(numberOfRecords.toString());
+	} catch(err) {
+		console.error(err.message);
+	}
+})
+
 router.get('/', async (req, res) => {
 	const query = {
 		encounter: {
@@ -16,17 +38,10 @@ router.get('/', async (req, res) => {
 			teamSize: parseInt(req.query['team-size']),
 		},
 	};
-
-	const sort = req.query.sort;
-
-	console.log(sort);
-	console.log(query);
-	console.log('GET /');
 	try {
 		const records = await Record.find(query)
-			.sort(sort)
+			.sort('timeInTicks')
 			.populate('players.playerId');
-		console.log(records);
 		res.send(records);
 	} catch (err) {
 		res.status(500).send('something went wrong');

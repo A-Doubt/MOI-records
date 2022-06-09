@@ -1,43 +1,20 @@
-import Select from 'react-select';
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import axios from 'axios';
 import {
-	bossNameInputOptions,
-	teamSizeInputOptions,
-	modeInputOptions,
+	bossesOptions,
 	customSelectTheme,
-	voragoRotationOptions,
-} from './react-select-helper';
+} from '../services/react-select-helper';
+import Select from 'react-select';
+import axios from 'axios';
 import timeToTicks from '../services/timeToTicks';
-import { useNavigate } from 'react-router-dom';
 
 export default function NewRecord() {
-	const navigate = useNavigate();
-
-	// hidden input (to make things easier to handle)
-	const [bossNameInput, setBossNameInput] = React.useState('');
-
-	// input values
-	const [minutesValue, setMinutesValue] = React.useState('')
-	const [secondsValue, setSecondsValue] = React.useState('')
-
-	const [modeValue, setModeValue] = React.useState('');
-	const [teamValue, setTeamValue] = React.useState('');
-	const [rotationValue, setRotationValue] = React.useState({
-		label: 'N/A',
-		value: 'N/A',
-	});
-	const [playersValue, setPlayersValue] = React.useState('');
-
-	// input options
-	const [modeOptions, setModeOptions] = React.useState(modeInputOptions);
-	const [teamOptions, setTeamOptions] = React.useState(teamSizeInputOptions);
-	const [playersOptions, setPlayersOptions] = React.useState(['']);
-
-	// errors
 	const [errorMessage, setErrorMessage] = React.useState('');
 
+	const [playersValues, setPlayersValues] = React.useState([]);
+	const [playersOptions, setPlayersOptions] = React.useState([]);
 
+	// set players options from DB
 	React.useEffect(() => {
 		const players = [];
 
@@ -51,264 +28,164 @@ export default function NewRecord() {
 		fetchData();
 	}, []);
 
-	// set the options on mode and teamsize when changing encounter name
+	const [inputValues, setInputValues] = React.useState({
+		boss: {},
+		mode: { value: null, label: 'Choose a mode...' },
+		size: { value: null, label: 'Choose a team size...' },
+		minutes: '',
+		seconds: '',
+		notes: '',
+		dateKilled: '',
+	});
+	const [inputOptions, setInputOptions] = React.useState({
+		bosses: {},
+		modes: {},
+		sizes: {},
+	});
+
+	// set boss input options
 	React.useEffect(() => {
-		switch (bossNameInput) {
-			case 'Araxxi':
-			case 'Nex':
-			case 'Raksha':
-				setTeamOptions([
-					teamSizeInputOptions[1],
-					teamSizeInputOptions[2],
-				]);
-				setModeOptions([
-					{
-						value: false,
-						label: 'Normal mode',
-					},
-				]);
-				console.log('solo duo / NM');
-				break;
-
-			case 'Arch-Glacor':
-			case 'Commander Zilyana':
-			case 'General Graardor':
-			case 'Giant Mole':
-			case 'Gregorovic':
-			case 'Helwyr':
-			case "Kree'arra":
-			case "K'ril Tsutsaroth":
-			case 'The Twin Furies':
-			case 'TzKal-Zuk':
-			case 'Vindicta & Gorvek':
-				setTeamOptions([teamSizeInputOptions[1]]);
-				setModeOptions([
-					{
-						value: false,
-						label: 'Normal mode',
-					},
-					{ value: true, label: 'Hardmode' },
-				]);
-				console.log('solo / NM HM');
-				break;
-
-			case 'Beastmaster Durzag':
-			case 'Yakamaru':
-				setTeamOptions([teamSizeInputOptions[5]]);
-				setModeOptions([
-					{
-						value: false,
-						label: 'Normal mode',
-					},
-				]);
-				break;
-
-			case 'Corporeal Beast':
-			case 'Har-Aken':
-			case 'Kalphite Queen':
-			case 'King Black Dragon':
-			case 'Legiones':
-			case 'The Magister':
-			case 'Queen Black Dragon':
-			case 'Telos':
-			case 'TzTok-Jad':
-				setTeamOptions([teamSizeInputOptions[1]]);
-				setModeOptions([
-					{
-						value: false,
-						label: 'Normal mode',
-					},
-				]);
-				break;
-
-			case 'The Sanctum Guardian':
-			case 'Masuta the Ascended':
-			case 'Seiryu the Azure Serpent':
-			case 'Astellarn':
-			case 'Verak Lith':
-			case 'Black Stone Dragon':
-			case 'Crassian Leviathan':
-			case 'Taraket the Necromancer':
-			case 'The Ambassador':
-				setTeamOptions([
-					teamSizeInputOptions[1],
-					teamSizeInputOptions[2],
-					teamSizeInputOptions[3],
-				]);
-				setModeOptions([
-					{
-						value: false,
-						label: 'Normal mode',
-					},
-				]);
-				console.log('solo duo trio / NM');
-				break;
-
-			case 'Kalphite King':
-				setTeamOptions([
-					teamSizeInputOptions[1],
-					teamSizeInputOptions[2],
-					teamSizeInputOptions[3],
-					teamSizeInputOptions[4],
-					teamSizeInputOptions[5],
-				]);
-				setModeOptions([
-					{
-						value: false,
-						label: 'Normal mode',
-					},
-				]);
-				console.log('solo duo trio four mass / NM');
-				break;
-
-			case 'Kerapac':
-				setTeamOptions([
-					teamSizeInputOptions[1],
-					teamSizeInputOptions[2],
-					teamSizeInputOptions[3],
-				]);
-				setModeOptions([
-					{
-						value: false,
-						label: 'Normal mode',
-					},
-					{ value: true, label: 'Hardmode' },
-				]);
-				console.log('solo duo trio / NM HM');
-				break;
-
-			case 'Nex - Angel of Death':
-				setTeamOptions([teamSizeInputOptions[5]]);
-				setModeOptions([
-					{
-						value: false,
-						label: 'Normal mode',
-					},
-				]);
-				console.log('mass / NM');
-				break;
-			case 'Solak':
-				setTeamOptions([
-					teamSizeInputOptions[2],
-					teamSizeInputOptions[3],
-					teamSizeInputOptions[4],
-					teamSizeInputOptions[5],
-				]);
-				setModeOptions([
-					{
-						value: false,
-						label: 'Normal mode',
-					},
-				]);
-				console.log('duo trio 4man mass / NM');
-				break;
-			case 'Vorago':
-				setTeamOptions([
-					teamSizeInputOptions[1],
-					teamSizeInputOptions[2],
-					teamSizeInputOptions[3],
-					teamSizeInputOptions[4],
-					teamSizeInputOptions[5],
-				]);
-				setModeOptions([
-					{
-						value: false,
-						label: 'Normal mode',
-					},
-					{
-						value: true,
-						label: 'Hardmode',
-					},
-				]);
-				console.log('solo duo trio 4man mass / NM HM');
-				break;
-
-			default:
-				console.log('something went wrong?');
-		}
-	}, [bossNameInput]);
-
-	// change the team size input when changing encounter name
-	React.useEffect(() => {
-		if (teamOptions.find((option) => option.value === 1)) {
-			setTeamValue({ value: 1, label: 'Solo' });
-		} else if (bossNameInput === 'Beastmaster Durzag' || bossNameInput === 'Yakamaru' || bossNameInput === 'Nex - Angel of Death') {
-			setTeamValue({ value: 'mass', label: '5 or more' })
-		} else {
-			setTeamValue({ value: '', label: 'Any' });
-		}
-	}, [teamOptions]);
+		const bossOptions = bossesOptions.map((boss) => {
+			return { value: boss.bossName, label: boss.bossName };
+		});
+		setInputOptions({ ...inputOptions, bosses: bossOptions });
+	}, []);
 
 	function handleBossChange(e) {
-		setBossNameInput(e.value);
-		setPlayersValue('');
-		setRotationValue('');
-	}
-
-	function handleModeChange(e) {
-		setModeValue({
-			value: e.value,
-			label: e.value ? 'Hard mode' : 'Normal mode',
+		setInputValues({
+			...inputValues,
+			boss: { value: e.value, label: e.value },
+			mode: { value: null, label: 'Choose a mode...' },
+			size: { value: null, label: 'Choose a team size...' },
 		});
 	}
 
-	function handleTeamChange(e) {
-		let label;
-		if (e.value === 1) label = 'Solo';
-		else if (e.value === 2) label = 'Duo';
-		else if (e.value === 3) label = 'Trio';
-		else if (e.value === 4) label = '4-man';
-		else label = '5 or more';
-
-		setTeamValue({
-			value: e.value,
-			label: label,
-		});
-		setPlayersValue('');
-	}
-
-	function handlePlayersChange(e) {
-		setPlayersValue(e);
-	}
-
-	// If switching from a boss that has hardmode to a one with only
-	// normal mode force to change the mode input to Normal mode.
 	React.useEffect(() => {
-		if (!modeOptions.find((option) => option.value === true)) {
-			console.log('CHANGING TO NM');
-			setModeValue({ value: false, label: 'Normal mode' });
-		}
-	}, [modeOptions]);
+		let modes = [];
+		let sizes = [];
 
-	
-	function handleAllowedTeamSize() {
-		let teamSize;
-		if (teamValue.value === 'mass') teamSize = 10;
-		else teamSize = teamValue.value;
-		if (bossNameInput === 'Nex - Angel of Death') teamSize = 7;
-		return playersValue.length >= teamSize || playersValue.length >= 10;
+		bossesOptions.forEach((bossOption) => {
+			if (bossOption.bossName === inputValues.boss.value) {
+				bossOption.modes.forEach((mode) => {
+					modes.push({
+						label: mode ? 'Hardmode' : 'Normal mode',
+						value: mode,
+					});
+				});
+				bossOption.teamSizes.forEach((size) => {
+					let sizeName;
+					switch (size) {
+						case 1:
+							sizeName = 'Solo';
+							break;
+						case 2:
+							sizeName = 'Duo';
+							break;
+						case 3:
+							sizeName = 'Trio';
+							break;
+						case 4:
+							sizeName = '4-man';
+							break;
+						case 7:
+							sizeName = '7-man';
+							break;
+						case 10:
+							sizeName = 'Raid size';
+							break;
+						default:
+							sizeName = 'Mass';
+							break;
+					}
+					sizes.push({ label: sizeName, value: size });
+				});
+
+				setInputOptions({ ...inputOptions, modes, sizes });
+			}
+		});
+		setPlayersValues([]);
+	}, [inputValues.boss.value]);
+
+	// playersInputs are Select components bundled
+	const [playersInputs, setPlayersInputs] = React.useState([]);
+
+	// On team size change to handle the amount of players
+
+	React.useEffect(() => {
+		setPlayersValues((prevState) => {
+			const newArray = [...prevState];
+			newArray.splice(inputValues.size.value);
+			return newArray;
+		});
+
+		let playerAmount = inputValues.size.value;
+		if (inputValues.size.value === 'mass') playerAmount = 7;
+
+		let playersSelectInputs = [];
+
+		for (let i = 0; i < playerAmount; i++) {
+			// remove excessive player values added to state
+			if (!playersValues[i]) {
+				setPlayersValues((prevState) => {
+					const newArray = [...prevState];
+					newArray.splice(i);
+					return newArray;
+				});
+			}
+
+			playersSelectInputs.push(
+				<div key={`div${i}`} className="flex-row">
+					Player{[i + 1]}
+					<Select
+						name={i} // To nake handling easy
+						key={`key${i}`}
+						options={playersOptions}
+						styles={customSelectTheme}
+						onChange={handlePlayersChange}
+						value={playersValues[i]}
+					/>
+				</div>
+			);
+		}
+		setPlayersInputs(playersSelectInputs);
+	}, [inputValues.size.value]);
+
+	function handlePlayersChange(e, { name }) {
+		let players = playersValues; // Array
+		if (!players) players = [];
+
+		players[name] = { ...players[name], label: e.label, value: e.value };
+		setPlayersValues(players);
 	}
-	
+
 	async function handleSubmit(e) {
 		e.preventDefault();
-		setErrorMessage('')
-		if (!playersValue) return setErrorMessage('Pick at least 1 player!')
+		setErrorMessage('');
+		if (!inputValues.boss.value) return setErrorMessage('Pick a boss');
+		if (inputValues.mode.value !== false || inputValues.mode.value === true) {
+			return setErrorMessage('Pick a mode');
+		}
 		const players = [];
-		playersValue.forEach((player) => {
-			players.push({playerId: player.value});
-		})
-		console.log("🚀 ~ file: NewRecord.js ~ line 290 ~ handleSubmit ~ players", players[0])
+		playersValues.forEach((player) => {
+			players.push({ playerId: player.value });
+		});
+		if (!players.length)
+			return setErrorMessage('Choose at least 1 player!');
+		
+
 		const body = {
-			timeInTicks: timeToTicks(minutesValue, secondsValue),
+			timeInTicks: timeToTicks(inputValues.minutes, inputValues.seconds),
 			encounter: {
-				bossName: bossNameInput,
-				hardmode: modeValue.value,
-				teamSize: teamValue.value,
+				bossName: inputValues.boss.value,
+				hardmode: inputValues.mode.value,
+				teamSize: inputValues.size.value,
 			},
 			players: players,
-			rotation: rotationValue.value,
-		}
-        console.log("🚀handleSubmit ~ body", body)
+			dateKilled: new Date(inputValues.dateKilled),
+			notes: inputValues.notes ? inputValues.notes : 'none',
+		};
+
+		console.log('🚀handleSubmit ~ body', body);
 		try {
 			const res = await axios({
 				url: 'http://localhost:3000/api/records',
@@ -316,111 +193,151 @@ export default function NewRecord() {
 				method: 'post',
 			});
 			const data = res.data;
-			console.log(data);
-
-			navigate('/records');
 			return data;
-		} catch(err) {
-			setErrorMessage(err.response.data);
+		} catch (err) {
+			console.log(err);
 			console.log(err.response);
+			setErrorMessage(err.response.data);
 		}
 	}
 
 	return (
 		<>
-			<h1>Add a new Record here</h1>
-			<form onSubmit={handleSubmit}>
-				<label htmlFor="boss-name">Encouter name</label>
-				<Select
-					options={bossNameInputOptions}
-					onChange={handleBossChange}
-					inputId="boss-name"
-					styles={customSelectTheme}
-				/>
-				<input type="hidden" value={bossNameInput} name="boss-name" />
+			{errorMessage ? (
+				<h1 className="error">{errorMessage}</h1>
+			) : (
+				<h1>Add a new Record here</h1>
+			)}
+			<div className="flex-row centered">
+				<form onSubmit={handleSubmit} className="flex-column new-record-form">
+					<div className="container flex-row">
+						<div className="form-inputs--container">
+							<Select
+								options={inputOptions.bosses}
+								styles={customSelectTheme}
+								onChange={handleBossChange}
+								value={
+									inputValues.boss.value
+										? inputValues.boss
+										: { label: 'Choose a boss' }
+								}
+							/>
+								<Select
+									options={inputOptions.modes}
+									styles={customSelectTheme}
+									onChange={(e) =>
+										setInputValues({
+											...inputValues,
+											mode: {
+												value: e.value,
+												label: e.label,
+											},
+										})
+									}
+									value={inputValues.mode}
+									isDisabled={
+										inputValues.boss.value ? false : true
+									}
+								/>
+								<Select
+									options={inputOptions.sizes}
+									styles={customSelectTheme}
+									onChange={(e) => {
+										setInputValues({
+											...inputValues,
+											size: {
+												value: e.value,
+												label: e.label,
+											},
+										});
+									}}
+									value={inputValues.size}
+									isDisabled={
+										inputValues.boss.value ? false : true
+									}
+								/>
+						</div>
+						<div className="form-inputs-container">
+							{inputValues.size.value && playersInputs}
+						</div>
+					</div>
+					<div className="flex-row">
+						<div className="flex-column">
+							<label htmlFor="minutes">Minutes</label>
+							<input
+								className="input-dark"
+								type="number"
+								id="minutes"
+								name="minutes"
+								min={0}
+								max={59}
+								placeholder="time(minutes)"
+								value={inputValues.minutes}
+								onChange={(e) => {
+									if (e.target.value > 59) e.target.value = 59;
+									if (e.target.value < 0) e.target.value = 0;
+									setInputValues({
+										...inputValues,
+										minutes: e.target.value,
+									});
+								}}
+							/>
+							<label htmlFor="seconds">seconds</label>
+							<input
+								className="input-dark"
+								type="number"
+								id="seconds"
+								name="seconds"
+								min={0}
+								max={59.4}
+								step={0.6}
+								placeholder="time(seconds)"
+								value={inputValues.seconds}
+								onChange={(e) => {
+									if (e.target.value > 59.4) e.target.value = 59.4;
+									if (e.target.value < 0) e.target.value = 0;
+									setInputValues({
+										...inputValues,
+										seconds: e.target.value,
+									});
+								}}
+								required
+							/>
+						</div>
+						<div className="flex-column">
+							<label htmlFor="notes">Additional notes</label>
+							<textarea
+								className="input-dark"
+								value={inputValues.notes}
+								onChange={(e) =>
+									setInputValues({
+										...inputValues,
+										notes: e.target.value,
+									})
+								}
+								maxLength={100}
+								id="notes"
+								name="notes"
+							/>
 
-				{bossNameInput && (
-					<>
-						<label htmlFor="mode">Mode</label>
-						<Select
-							options={modeOptions}
-							onChange={handleModeChange}
-							inputId="mode"
-							styles={customSelectTheme}
-							value={modeValue}
-						/>
-					</>
-				)}
-				{bossNameInput && (
-					<>
-						<label htmlFor="team">Team size</label>
-						<Select
-							options={teamOptions}
-							onChange={handleTeamChange}
-							inputId="team"
-							styles={customSelectTheme}
-							value={teamValue}
-						/>
-					</>
-				)}
-
-				{bossNameInput === 'Vorago' && (
-					<>
-						<label htmlFor="team">Vorago rotation</label>
-						<Select
-							options={voragoRotationOptions}
-							inputId="rotation"
-							styles={customSelectTheme}
-							value={rotationValue}
-							onChange={(e) =>
-								setRotationValue({
-									value: e.value,
-									label: e.value,
-								})
-							}
-						/>
-					</>
-				)}
-
-				<fieldset>
-					<legend>Encounter time</legend>
-					<label htmlFor="minutes">Minutes</label>
-					<input
-						type="number"
-						id="minutes"
-						name="minutes"
-						min={0}
-						max={59}
-						value={minutesValue}
-						onChange={(e) => setMinutesValue(e.target.value)}
-					/>
-					<label htmlFor="seconds">Seconds</label>
-					<input
-						type="number"
-						id="seconds"
-						name="seconds"
-						min={0}
-						max={59.4}
-						step={0.6}
-						value={secondsValue}
-						onChange={(e) => setSecondsValue(e.target.value)}
-					/>
-				</fieldset>
-
-				<label htmlFor="team">Players</label>
-				<Select
-					options={playersOptions}
-					onChange={handlePlayersChange}
-					inputId="players"
-					styles={customSelectTheme}
-					value={playersValue}
-					isMulti
-					isOptionDisabled={handleAllowedTeamSize}
-				/>
-
-				<button type="submit">Submit a new record</button>
-			</form>
-			{errorMessage && <p>{errorMessage}</p>}
+							<label htmlFor="date">Date killed</label>
+							<input
+								type="date"
+								id="date"
+								required
+								className="input-dark"
+								onChange={(e) => {
+									setInputValues({
+										...inputValues,
+										dateKilled: e.target.value,
+									});
+								}}
+							/>
+						</div>
+					</div>
+					<button type="submit">Submit</button>
+				</form>
+			</div>
 		</>
 	);
 }

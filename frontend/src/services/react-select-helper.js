@@ -212,7 +212,7 @@ export const customSelectTheme = {
 		return {
 			...provided,
 			cursor: 'pointer',
-			color: state.value === true ? 'red' : 'white',
+			color: 'white',
 			backgroundColor: state.isSelected ? '#457fff' : 'black',
 			padding: 12,
 			'&:hover': {
@@ -253,15 +253,17 @@ export const customSelectTheme = {
 			cursor: state.isDisabled ? 'not-allowed' : 'pointer',
 			boxShadow: state.menuIsOpen
 				? '0 0 0 2px darkblue'
-				: '0 0 0 1px darkgrey',
+				: '0 0 0 1px rgb(70, 70, 70)',
+			pointerEvents: 'auto'
 		};
 	},
 	dropdownIndicator: (provided, state) => {
 		return {
 			...provided,
-			cursor: 'pointer',
+			cursor: state.isDisabled ? 'not-allowed' : 'pointer',
 			backgroundColor: 'black',
 			color: 'white',
+
 		};
 	},
 	indicatorSeparator: (provided, state) => {
