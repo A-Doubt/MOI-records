@@ -8,29 +8,12 @@ import Fawn from 'fawn';
 
 const router = express.Router();
 
-router.get('/sort', async (req, res) => {
-	console.log(req.query)
-	try {
-		const records = await Record.find({})
-			.sort({dateAdded: -1})
-			.populate('players.playerId')
-			.limit(20);
-		res.send(records);
-	} catch(err) {
-		console.error(err.message);
-	}
-})
-
-router.get('/count', async (req, res) => {
-	try {
-		const numberOfRecords = await Record.find({}).count();
-		res.send(numberOfRecords.toString());
-	} catch(err) {
-		console.error(err.message);
-	}
-})
-
 router.get('/', async (req, res) => {
+	const records = await Record.find({});
+	res.send(records);
+})
+
+router.get('/boss', async (req, res) => {
 	const query = {
 		encounter: {
 			bossName: req.query['boss-name'],
@@ -44,10 +27,32 @@ router.get('/', async (req, res) => {
 			.populate('players.playerId');
 		res.send(records);
 	} catch (err) {
-		res.status(500).send('something went wrong');
+		res.status(500).send('something went wrong.');
 		console.error(err.message);
 	}
 });
+
+router.get('/sort', async (req, res) => {
+	try {
+		const records = await Record.find({})
+			.sort({ dateAdded: -1 })
+			.populate('players.playerId')
+			.limit(20);
+		res.send(records);
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
+router.get('/count', async (req, res) => {
+	try {
+		const numberOfRecords = await Record.find({}).count();
+		res.send(numberOfRecords.toString());
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
 
 router.get('/:id', validateObjectId, async (req, res) => {
 	try {
@@ -58,7 +63,7 @@ router.get('/:id', validateObjectId, async (req, res) => {
 				.send(`Record of id: ${req.params.id} was not found.`);
 		res.send(record);
 	} catch (err) {
-		res.status(500).send('something went wrong');
+		res.status(500).send('something went wrong.');
 		console.error(err.message);
 	}
 });
@@ -82,15 +87,11 @@ router.post('/', async (req, res) => {
 			dateAdded: new Date(),
 			notes: req.body.notes ? req.body.notes : '',
 		});
-		console.log(record._id);
-		console.log(record.players[0].playerId);
 
 		let task = Fawn.Task();
 		task.save('records', record);
 
 		for (let i = 0; i < record.players.length; i++) {
-			let player = await Player.findById(record.players[i].playerId);
-			console.log(player);
 
 			task = task.update(
 				'players',
@@ -106,7 +107,33 @@ router.post('/', async (req, res) => {
 
 		res.status(201).send(record);
 	} catch (err) {
-		res.status(500).send('something went wrong');
+		res.status(500).send('something went wrong.');
+		console.error(err.message);
+	}
+});
+
+router.delete('/:id', validateObjectId, async (req, res) => {
+	try {
+		const task = Fawn.Task();
+
+		const record = await Record.findById(req.params.id);
+		record.players.forEach((player) => {
+			// remove the record from records in players documents
+			task.update('players', { _id: player.playerId }, {
+				'$pull' : {
+					records: record._id
+				}
+			})
+		});
+		task.remove('records', {
+			_id: new mongoose.Types.ObjectId(req.params.id),
+		});
+
+		await task.run();
+		res.status(200).send(record);
+
+	} catch (err) {
+		res.status(500).send('something went wrong.');
 		console.error(err.message);
 	}
 });

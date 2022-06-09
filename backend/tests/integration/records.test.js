@@ -2,10 +2,12 @@ import request from 'supertest';
 import mongoose from 'mongoose';
 import Record from '../../models/record.mjs';
 import server from '../../index.mjs';
+import Player from '../../models/player.mjs';
 server.close();
 
 const id1 = new mongoose.Types.ObjectId();
 const id2 = new mongoose.Types.ObjectId();
+const playerId = new mongoose.Types.ObjectId()
 
 // Sample records used for tests.
 let records = [
@@ -18,18 +20,19 @@ let records = [
 			hardmode: true,
 			teamSize: 1,
 		},
-		players: [{ playerId: new mongoose.Types.ObjectId(), style: 'melee' }],
+		players: [{ playerId: playerId }],
 		notes: 'test note',
 	},
 	{
 		_id: id2,
 		timeInTicks: 555,
+		dateKilled: new Date(),
 		encounter: {
 			bossName: 'Kerapac',
 			hardmode: false,
 			teamSize: 2,
 		},
-		players: [{ playerId: mongoose.Types.ObjectId(), style: 'magic' }],
+		players: [{ playerId: mongoose.Types.ObjectId() }],
 		notes: 'test note 2',
 	},
 ];
@@ -40,6 +43,7 @@ describe('/api/records', () => {
 	});
 	afterEach(async () => {
 		await Record.deleteMany({});
+		await Player.deleteMany({})
 		server.close();
 	});
 
@@ -98,6 +102,7 @@ describe('/api/records', () => {
 				.post('/api/records')
 				.send(recordToSave);
 
+
 			const record = await Record.findOne({timeInTicks: 666});
 			expect(res.status).toBe(201);
 			expect(record).not.toBeNull();
@@ -105,11 +110,26 @@ describe('/api/records', () => {
 		})
 
 		it('returns the record if it is valid', async () => {
-			const recordToSave = records[0];
 
+			await Player.collection.insertOne({ name: 'player', _id: playerId, records: [], })
+
+			const recordToSave = {
+				timeInTicks: 666,
+				dateKilled: new Date(),
+				encounter: {
+					bossName: 'Vorago',
+					hardmode: true,
+					teamSize: 1,
+				},
+				players: [{ playerId }],
+				notes: 'test note',
+			}
+	
 			const res = await request(server)
-				.post('/api/records')
-				.send(recordToSave);
+			.post('/api/records')
+			.send(recordToSave);
+			
+			console.log(await Player.findOne({}))
 
 			expect(res.status).toBe(201);
 			expect(res.body).not.toBeNull();
@@ -127,5 +147,11 @@ describe('/api/records', () => {
 
 			expect(res.status).toBe(400);
 		});
+	})
+
+	describe('DELETE /:id', () => {
+		it ('returns 200 if record is deleted', async () => {
+			expect(200).toBe(200);
+		}) 
 	})
 });

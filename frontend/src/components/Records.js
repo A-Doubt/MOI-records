@@ -26,7 +26,7 @@ function Records() {
 				resArray = await Promise.all(
 					sizesArray.map((size) => {
 						return axios.get(
-							`http://localhost:3000/api/records/?boss-name=${body.bossName}&team-size=${size}&hardmode=${body.hardmode}`
+							`http://localhost:3000/api/records/boss/?boss-name=${body.bossName}&team-size=${size}&hardmode=${body.hardmode}`
 						);
 					})
 				);
@@ -34,7 +34,7 @@ function Records() {
 				// if boss size was chosen make 1 query
 			} else {
 				const res = await axios.get(
-					`http://localhost:3000/api/records/?boss-name=${body.bossName}&team-size=${body.teamSize}&hardmode=${body.hardmode}`
+					`http://localhost:3000/api/records/boss/?boss-name=${body.bossName}&team-size=${body.teamSize}&hardmode=${body.hardmode}`
 				);
 				resArray.push(res);
 			}

@@ -161,6 +161,7 @@ export default function NewRecord() {
 	async function handleSubmit(e) {
 		e.preventDefault();
 		setErrorMessage('');
+
 		if (!inputValues.boss.value) return setErrorMessage('Pick a boss');
 		if (inputValues.mode.value !== false || inputValues.mode.value === true) {
 			return setErrorMessage('Pick a mode');
@@ -335,7 +336,7 @@ export default function NewRecord() {
 							/>
 						</div>
 					</div>
-					<button type="submit">Submit</button>
+					<button type="submit" className="submit-btn">Submit</button>
 				</form>
 			</div>
 		</>

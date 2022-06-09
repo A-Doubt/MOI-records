@@ -5,13 +5,8 @@ import { validatePlayer } from '../models/player.mjs';
 const router = express();
 
 router.get('/', async (req, res) => {
-	try {
-		const players = await Player.find().sort('name');
-		res.send(players);
-	} catch (err) {
-		console.error(err.message);
-		res.status(500).send('Something went wrong. (GET /api/players');
-	}
+	const players = await Player.find().sort('name');
+	res.send(players);
 });
 
 router.get('/:id', validateObjectId, async (req, res) => {
@@ -29,15 +24,12 @@ router.get('/:id', validateObjectId, async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-	console.log(req.body);
 	try {
 		// Validate with Joi
 		const { error } = validatePlayer(req.body);
 		if (error) return res.status(400).send(error.details[0].message);
 
-		console.log('name', req.body.name);
 		const player = new Player({ name: req.body.name });
-		console.log(player);
 		await player.save();
 		res.status(201).send(player);
 	} catch (err) {
@@ -47,7 +39,6 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-	console.log(req.body)
 	try {
 		const player = await Player.findByIdAndUpdate(
 			req.params.id,
@@ -57,7 +48,6 @@ router.put('/:id', async (req, res) => {
 			},
 			{ new: true }
 		);
-		console.log('player updated: ', player);
 		res.send(player);
 	} catch (err) {
 		console.error(err.message);

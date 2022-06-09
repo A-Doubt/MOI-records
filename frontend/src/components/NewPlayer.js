@@ -1,15 +1,31 @@
 import axios from 'axios';
 import React from 'react';
+import Select from 'react-select';
+import { customSelectTheme } from '../services/react-select-helper'
 
 export default function NewPlayer() {
 	// contolling input
 	const [nameInput, setNameInput] = React.useState('');
-	const [errMessage, setErrMessage] = React.useState('');
+	const [errorMessage, setErrorMessage] = React.useState('');
+	const [playersOptions, setPlayersOptions] = React.useState('');
+
+	React.useEffect(() => {
+		const players = [];
+
+		async function fetchData() {
+			const data = await axios.get('http://localhost:3000/api/players');
+			data.data.forEach((player) => {
+				players.push({ label: player.name, value: player._id });
+			});
+			setPlayersOptions(players);
+		}
+		fetchData();
+	}, []);
 
 	async function handleSubmit(e) {
 		e.preventDefault();
 		try {
-			setErrMessage('');
+			setErrorMessage('');
 			const body = { name: nameInput };
 			const res = await axios({
 				url: 'http://localhost:3000/api/players',
@@ -21,8 +37,10 @@ export default function NewPlayer() {
 			console.log(data);
 			return data;
 		} catch (err) {
-			setErrMessage(err.response);
 			console.log(err.response);
+			if (err.response.data.includes('unique'))
+				return setErrorMessage('That player already is in the database');
+			setErrorMessage(err.response.data);
 		}
 	}
 
@@ -32,21 +50,34 @@ export default function NewPlayer() {
 
 	return (
 		<>
-			<h2>Make sure to check if a player is in the database</h2>
-			<form onSubmit={handleSubmit}>
-				<input
-					type="text"
-					onChange={handleNameChange}
-					value={nameInput}
-				></input>
-				<button type="submit">Submit</button>
-			</form>
-			{errMessage && (
+			{errorMessage ? (
 				<div className="container error-container error">
-					<p>ERROR: {errMessage.data}</p>
-					<p>STATUS: {errMessage.status}</p>
+					<h1 className="error">{errorMessage}</h1>
 				</div>
+			) : (
+				<h1>Add a new player here</h1>
 			)}
+			<div className="flex-row centered">
+				<form onSubmit={handleSubmit} className="flex-column centered">
+					<label htmlFor="player-name">Player name:</label>
+					<input
+						id="player-name"
+						type="text"
+						onChange={handleNameChange}
+						value={nameInput}
+						className="input-dark"
+					></input>
+					<button type="submit" className="submit-btn">Submit</button>
+				</form>
+			</div>
+			<div className="flex-column centered mt-60">
+				<label htmlFor="players-in-db">Players already in the database:</label>
+				<Select
+					id="players-in-db"
+					options={playersOptions}
+					styles={customSelectTheme}
+				/>
+			</div>
 		</>
 	);
 }

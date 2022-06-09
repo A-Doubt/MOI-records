@@ -53,13 +53,26 @@ export default function LatestSubmissions() {
 						<td className="players-td">{players}</td>
 						<td>{moment(record.dateKilled).format('DD-MM-YYYY')}</td>
 						<td>{moment(record.dateAdded).format('DD-MM-YYYY')}</td>
-						<td className="spaced">{moment(record.dateAdded).format('H:MM:SS')}</td>
+						<td className="spaced">{moment(record.dateAdded).format('h:mm:ss')}</td>
+						<td><button onClick={removeSubmission} id={record._id}>❌</button></td>
 					</tr>
 				);
 			});
 			setTableBody(spreadsheet);
 		}
 	}, [latestSubmissions]);
+
+
+	function removeSubmission(e) {
+		try {
+			console.log(e.target.id)
+			axios.delete(`http://localhost:3000/api/records/${e.target.id}`)
+		} catch (err) {
+			console.error(err.message);
+		}
+	}
+
+
 
 	return (
 		<div className="flex-row centered" key={nanoid()}>
@@ -76,6 +89,7 @@ export default function LatestSubmissions() {
 						<th>Date killed</th>
 						<th>Date added</th>
 						<th>Time added</th>
+						<th>REMOVE</th>
 					</tr>
 				</thead>
 				<tbody>{tableBody}</tbody>

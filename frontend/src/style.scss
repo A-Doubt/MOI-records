@@ -96,6 +96,10 @@ h1 {
 	width: 30px;
 }
 
+.mt-60 {
+	margin-top: 60px;
+}
+
 
 // Header
 header {
@@ -177,16 +181,16 @@ a {
 
 // ???
 
+input,
+select {
+	font-size: 1.2rem;
+	width: 340px;
+	height: 52px;
+}
 form {
 	display: flex;
 	flex-direction: column;
 
-	input,
-	select {
-		font-size: 1.2rem;
-		width: 340px;
-		height: 52px;
-	}
 
 	.input-container {
 		margin-left: 12px;
