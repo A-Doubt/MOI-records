@@ -18,7 +18,9 @@
 		"joi": "^17.6.0",
 		"joi-objectid": "^4.0.2",
 		"mongoose": "^6.3.4",
-		"mongoose-unique-validator": "^3.0.0"
+		"mongoose-unique-validator": "^3.0.0",
+		"winston": "^3.7.2",
+		"winston-mongodb": "^5.0.7"
 	},
 	"devDependencies": {
 		"jest": "^28.1.0",

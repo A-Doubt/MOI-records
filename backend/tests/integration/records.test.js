@@ -7,7 +7,7 @@ server.close();
 
 const id1 = new mongoose.Types.ObjectId();
 const id2 = new mongoose.Types.ObjectId();
-const playerId = new mongoose.Types.ObjectId()
+const playerId = new mongoose.Types.ObjectId();
 
 // Sample records used for tests.
 let records = [
@@ -43,7 +43,7 @@ describe('/api/records', () => {
 	});
 	afterEach(async () => {
 		await Record.deleteMany({});
-		await Player.deleteMany({})
+		await Player.deleteMany({});
 		server.close();
 	});
 
@@ -89,29 +89,17 @@ describe('/api/records', () => {
 			const res = await request(server).get(`/api/records/${id1}`);
 
 			expect(res.status).toBe(200);
-			expect(res.body).toMatchObject({timeInTicks: 666});
+			expect(res.body).toMatchObject({ timeInTicks: 666 });
 		});
 	});
 
 	describe('POST /', () => {
-
-		it('saves the record if it is valid', async () => {
-			const recordToSave = records[0];
-
-			const res = await request(server)
-				.post('/api/records')
-				.send(recordToSave);
-
-
-			const record = await Record.findOne({timeInTicks: 666});
-			expect(res.status).toBe(201);
-			expect(record).not.toBeNull();
-			expect(record).toMatchObject({timeInTicks: 666});
-		})
-
 		it('returns the record if it is valid', async () => {
-
-			await Player.collection.insertOne({ name: 'player', _id: playerId, records: [], })
+			await Player.collection.insertOne({
+				name: 'player',
+				_id: playerId,
+				records: [],
+			});
 
 			const recordToSave = {
 				timeInTicks: 666,
@@ -123,18 +111,18 @@ describe('/api/records', () => {
 				},
 				players: [{ playerId }],
 				notes: 'test note',
-			}
-	
+			};
+
 			const res = await request(server)
-			.post('/api/records')
-			.send(recordToSave);
-			
-			console.log(await Player.findOne({}))
+				.post('/api/records')
+				.send(recordToSave);
+
+			console.log(await Player.findOne({}));
 
 			expect(res.status).toBe(201);
 			expect(res.body).not.toBeNull();
-			expect(res.body).toMatchObject({timeInTicks: 666});
-		})
+			expect(res.body).toMatchObject({ timeInTicks: 666 });
+		});
 
 		it('returns 400 if record is missing timeInTicks', async () => {
 			const recordToSave = records[0];
@@ -144,14 +132,13 @@ describe('/api/records', () => {
 				.post('/api/records')
 				.send(recordToSave);
 
-
 			expect(res.status).toBe(400);
 		});
-	})
+	});
 
 	describe('DELETE /:id', () => {
-		it ('returns 200 if record is deleted', async () => {
+		it('returns 200 if record is deleted', async () => {
 			expect(200).toBe(200);
-		}) 
-	})
+		});
+	});
 });

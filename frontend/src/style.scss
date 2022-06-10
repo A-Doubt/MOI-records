@@ -203,10 +203,20 @@ form {
 		}
 	}
 
-	.input-dark {
+	.input-dark, textarea {
 		background-color: black;
 		color: var(--vbright);
 		border: lightgrey 1px solid;
+		padding: 4px 12px;
+		font-size: 1.1rem;
+	}
+
+	input[type=number]::-webkit-inner-spin-button {
+		position: relative;
+		left: 10px;  
+		height: 40px;
+		filter: invert(1);
+		padding: 10px;
 	}
 
 	::-webkit-calendar-picker-indicator {

@@ -160,12 +160,17 @@ export default function NewRecord() {
 
 	async function handleSubmit(e) {
 		e.preventDefault();
+		
+		// handle incorrect or missing inputs
 		setErrorMessage('');
-
 		if (!inputValues.boss.value) return setErrorMessage('Pick a boss');
 		if (inputValues.mode.value !== false || inputValues.mode.value === true) {
 			return setErrorMessage('Pick a mode');
 		}
+		if (Date.parse(inputValues.dateKilled) > new Date()) {
+			return setErrorMessage('Are you sure you killed the boss in the future?')
+		}
+
 		const players = [];
 		playersValues.forEach((player) => {
 			players.push({ playerId: player.value });
@@ -196,8 +201,6 @@ export default function NewRecord() {
 			const data = res.data;
 			return data;
 		} catch (err) {
-			console.log(err);
-			console.log(err.response);
 			setErrorMessage(err.response.data);
 		}
 	}
