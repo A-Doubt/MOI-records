@@ -11,7 +11,12 @@ import error from './middleware/error.js';
 import winston from 'winston';
 import logging from './logging.mjs';
 
-logging();
+logging(); // enable winston logger
+
+if (!config.get('adminPassword')) {
+	console.error('FATAL ERROR: adminPassword is not defined');
+	process.exit(1);
+}
 
 const app = express();
 
@@ -25,9 +30,12 @@ Fawn.init(db);
 
 app.use(cors());
 app.use(bodyParser.json());
+
+// Routes
 app.use('/api/records', records);
 app.use('/api/players', players);
 
+// Error handle
 app.use(error);
 
 const port = process.env.PORT || 3000;
