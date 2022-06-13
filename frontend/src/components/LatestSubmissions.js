@@ -53,7 +53,7 @@ export default function LatestSubmissions() {
 						<td className="players-td">{players}</td>
 						<td>{moment(record.dateKilled).format('DD-MM-YYYY')}</td>
 						<td>{moment(record.dateAdded).format('DD-MM-YYYY')}</td>
-						<td className="spaced">{moment(record.dateAdded).format('h:mm:ss')}</td>
+						<td className="spaced">{moment(record.dateAdded).format('HH:mm:ss')}</td>
 						<td><button onClick={removeSubmission} id={record._id}>❌</button></td>
 					</tr>
 				);

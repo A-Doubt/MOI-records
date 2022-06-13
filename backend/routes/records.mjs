@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import validateObjectId from '../middleware/validateObjectId.mjs';
 import { validateRecord } from '../models/record.mjs';
 import Fawn from 'fawn';
+import auth from '../middleware/auth.mjs';
 
 const router = express.Router();
 
@@ -49,7 +50,7 @@ router.get('/:id', validateObjectId, async (req, res) => {
 	res.send(record);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
 	// Validate with Joi
 	const { error } = validateRecord(req.body);
 	if (error) return res.status(400).send(error.details[0].message);

@@ -324,6 +324,33 @@ table {
 	}
 }
 
+.popup {
+	position: fixed;
+	margin-left: auto;
+	margin-right: auto;
+	top: 0;
+	left: 0;
+	right: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: #000000dc;
+}
+
+.popup-content {
+	position: relative;
+	text-align: center;
+	width: 500px;
+	height: 280px;
+	background-color: rgb(14, 69, 139);
+	padding: 10px 24px;
+	justify-content: space-evenly;
+	border-radius: 6px;
+	align-items: center;
+	h2 {
+		padding-bottom: 0;
+	}
+}
+
 table.non-records {
 	tr:nth-child(2n+1) {
 		background-color: #111c38;
