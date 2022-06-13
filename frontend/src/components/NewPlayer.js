@@ -6,6 +6,7 @@ import { customSelectTheme } from '../services/react-select-helper'
 export default function NewPlayer() {
 	// contolling input
 	const [nameInput, setNameInput] = React.useState('');
+	const [pwdInput, setPwdInput] = React.useState('');
 	const [errorMessage, setErrorMessage] = React.useState('');
 	const [playersOptions, setPlayersOptions] = React.useState('');
 
@@ -25,16 +26,18 @@ export default function NewPlayer() {
 	async function handleSubmit(e) {
 		e.preventDefault();
 		try {
-			setErrorMessage('');
+			setErrorMessage('Sending the request, please wait...');
 			const body = { name: nameInput };
 			const res = await axios({
 				url: 'http://localhost:3000/api/players',
 				data: body,
 				method: 'post',
+				headers: { adminPassword: pwdInput }
 			});
 
 			const data = res.data;
 			console.log(data);
+			setErrorMessage('');
 			return data;
 		} catch (err) {
 			console.log(err.response);
@@ -46,6 +49,10 @@ export default function NewPlayer() {
 
 	function handleNameChange(e) {
 		setNameInput(e.target.value);
+	}
+
+	function handlePwdChange(e) {
+		setPwdInput(e.target.value);
 	}
 
 	return (
@@ -66,6 +73,15 @@ export default function NewPlayer() {
 						onChange={handleNameChange}
 						value={nameInput}
 						className="input-dark"
+					></input>
+					<label htmlFor="pwd">Admin key:</label>
+					<input
+						id="pwd"
+						type="text"
+						onChange={handlePwdChange}
+						value={pwdInput}
+						className="input-dark"
+						autoComplete="off"
 					></input>
 					<button type="submit" className="submit-btn">Submit</button>
 				</form>

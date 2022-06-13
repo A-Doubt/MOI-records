@@ -81,8 +81,9 @@ function Records() {
 
 	return (
 		<>
-			<h1>Records Page</h1>
-			<p>Number of records: {numberOfRecords}</p>
+			<h1 className="text-centered">Records Page</h1>
+			<h2 className="text-centered">Total number of records: {numberOfRecords}</h2>
+			<h3 className="text-centered">Find a record:</h3>
 			<RecordForm handleSubmit={handleSubmit} />
 			<RecordSheet recordData={fetchedRecords} />
 		</>

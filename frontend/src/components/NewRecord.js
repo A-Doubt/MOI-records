@@ -37,6 +37,7 @@ export default function NewRecord() {
 		notes: '',
 		dateKilled: '',
 	});
+	const [pwdInput, setPwdInput] = React.useState('')
 	const [inputOptions, setInputOptions] = React.useState({
 		bosses: {},
 		modes: {},
@@ -134,9 +135,10 @@ export default function NewRecord() {
 			}
 
 			playersSelectInputs.push(
-				<div key={`div${i}`} className="flex-row">
-					Player{[i + 1]}
+				<div key={`div${i}`} className="flex-column">
+					<label htmlFor={`player${i + 1}`}>{`Player ${i + 1}`}</label>
 					<Select
+						inputId={`player${i + 1}`}
 						name={i} // To nake handling easy
 						key={`key${i}`}
 						options={playersOptions}
@@ -156,6 +158,10 @@ export default function NewRecord() {
 
 		players[name] = { ...players[name], label: e.label, value: e.value };
 		setPlayersValues(players);
+	}
+
+	function handlePwdChange(e) {
+		setPwdInput(e.target.value);
 	}
 
 	async function handleSubmit(e) {
@@ -210,13 +216,15 @@ export default function NewRecord() {
 			{errorMessage ? (
 				<h1 className="error">{errorMessage}</h1>
 			) : (
-				<h1>Add a new Record here</h1>
+				<h1 className="text-centered">Add a new record here</h1>
 			)}
 			<div className="flex-row centered">
 				<form onSubmit={handleSubmit} className="flex-column new-record-form">
-					<div className="container flex-row">
+					<div className="container flex-row gap50">
 						<div className="form-inputs--container">
+							<label htmlFor="boss-name">Boss name</label>
 							<Select
+								inputId="boss-name"
 								options={inputOptions.bosses}
 								styles={customSelectTheme}
 								onChange={handleBossChange}
@@ -226,7 +234,9 @@ export default function NewRecord() {
 										: { label: 'Choose a boss' }
 								}
 							/>
+								<label htmlFor="mode">Mode</label>
 								<Select
+									inputId="mode"
 									options={inputOptions.modes}
 									styles={customSelectTheme}
 									onChange={(e) =>
@@ -243,7 +253,9 @@ export default function NewRecord() {
 										inputValues.boss.value ? false : true
 									}
 								/>
+								<label htmlFor="team-size">Team size</label>
 								<Select
+									inputId="team-size"
 									options={inputOptions.sizes}
 									styles={customSelectTheme}
 									onChange={(e) => {
@@ -261,11 +273,11 @@ export default function NewRecord() {
 									}
 								/>
 						</div>
-						<div className="form-inputs-container">
+						<div className="flex-column form-inputs-container">
 							{inputValues.size.value && playersInputs}
 						</div>
 					</div>
-					<div className="flex-row">
+					<div className="flex-row gap50">
 						<div className="flex-column">
 							<label htmlFor="minutes">Minutes</label>
 							<input
@@ -286,7 +298,7 @@ export default function NewRecord() {
 									});
 								}}
 							/>
-							<label htmlFor="seconds">seconds</label>
+							<label htmlFor="seconds">Seconds</label>
 							<input
 								className="input-dark"
 								type="number"
@@ -338,6 +350,18 @@ export default function NewRecord() {
 								}}
 							/>
 						</div>
+					</div>
+					<div className="flex-column centered">
+						<label htmlFor="pwd">Admin key:</label>
+						<input
+							id="pwd"
+							type="text"
+							onChange={handlePwdChange}
+							value={pwdInput}
+							className="input-dark"
+							autoComplete="off"
+
+					/>
 					</div>
 					<button type="submit" className="submit-btn">Submit</button>
 				</form>

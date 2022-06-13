@@ -89,6 +89,7 @@ describe('/api/players', () => {
 		it('saves a player if it is valid', async () => {
 			const res = await request(server)
 				.post('/api/players')
+				.set('adminPassword', process.env.adminPassword)
 				.send({ name: 'player name' });
 
 			const player = await Player.findOne({ name: 'player name' })
@@ -99,6 +100,7 @@ describe('/api/players', () => {
 		it('returns a player if it is saved', async () => {
 			const res = await request(server)
 				.post('/api/players')
+				.set('adminPassword', process.env.adminPassword)
 				.send({ name: 'player name' })
 
 				expect(res.status).toBe(201);
@@ -109,10 +111,20 @@ describe('/api/players', () => {
 		it('returns 400 if player missing a name', async () => {
 			const res = await request(server)
 				.post('/api/players')
+				.set('adminPassword', process.env.adminPassword)
 				.send({ name: '' })
 
 			expect(res.status).toBe(400);
 		});
+
+		it('returns 403 if provided password is invalid', async () => {
+			const res = await request(server)
+				.post('/api/players')
+				.set('adminPassword', 'wrong password')
+				.send({ name: 'player name' })
+
+			expect(res.status).toBe(403);
+		})
 	});
 
 	describe('PUT /', () => {

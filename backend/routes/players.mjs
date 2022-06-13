@@ -2,6 +2,9 @@ import express from 'express';
 import Player from '../models/player.mjs';
 import validateObjectId from '../middleware/validateObjectId.mjs';
 import { validatePlayer } from '../models/player.mjs';
+import auth from '../middleware/auth.mjs';
+import _ from 'lodash';
+
 const router = express();
 
 router.get('/', async (req, res) => {
@@ -18,10 +21,14 @@ router.get('/:id', validateObjectId, async (req, res) => {
 	res.send(player);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
 	// Validate with Joi
 	const { error } = validatePlayer(req.body);
 	if (error) return res.status(400).send(error.details[0].message);
+
+	const objInDb = await Player.find(req.body);
+	if (!_.isEmpty(objInDb))
+		return res.status(400).send('This player already is in the Database!');
 
 	const player = new Player({ name: req.body.name });
 	await player.save();

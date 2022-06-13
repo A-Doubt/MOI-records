@@ -1,6 +1,5 @@
 import express from 'express';
 import Record from '../models/record.mjs';
-import Player from '../models/player.mjs';
 import mongoose from 'mongoose';
 import validateObjectId from '../middleware/validateObjectId.mjs';
 import { validateRecord } from '../models/record.mjs';

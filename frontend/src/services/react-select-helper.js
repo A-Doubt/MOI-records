@@ -206,6 +206,8 @@ export const customSelectTheme = {
 		return {
 			...provided,
 			width: 340,
+			paddingBottom: 14,
+			marginTop: 2,
 		};
 	},
 	option: (provided, state) => {
@@ -225,7 +227,7 @@ export const customSelectTheme = {
 		return {
 			...provided,
 			padding: 0,
-			marginTop: -6,
+			marginTop: -20,
 			boxShadow: '0 0 0 2px darkblue',
 		};
 	},

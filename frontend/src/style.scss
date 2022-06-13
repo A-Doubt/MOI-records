@@ -39,9 +39,24 @@ a {
 
 h1 {
 	font-size: 2rem;
-	text-align: center;
 	padding: 30px;
 	font-family: 'Rock Salt';
+}
+h2 {
+	font-size: 1.6rem;
+	padding-bottom: 30px;
+	font-family: 'Rock Salt';
+}
+h3 {
+	padding-bottom: 10px;
+}
+
+label {
+	font-size: 1.2rem;
+}
+
+.text-centered {
+	text-align: center;
 }
 
 // Global classes
@@ -61,6 +76,10 @@ h1 {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
+}
+
+.gap50 {
+	gap: 50px;
 }
 
 .centered {
@@ -186,6 +205,10 @@ select {
 	font-size: 1.2rem;
 	width: 340px;
 	height: 52px;
+	margin-bottom: 14px,
+}
+.new-record-form {
+	gap: 50px;
 }
 form {
 	display: flex;
@@ -201,6 +224,10 @@ form {
 			height: 30px;
 			width: 50px;
 		}
+	}
+	textarea {
+		height: 52px;
+		margin-bottom: 14px,
 	}
 
 	.input-dark, textarea {

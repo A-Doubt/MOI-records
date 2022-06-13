@@ -117,8 +117,6 @@ describe('/api/records', () => {
 				.post('/api/records')
 				.send(recordToSave);
 
-			console.log(await Player.findOne({}));
-
 			expect(res.status).toBe(201);
 			expect(res.body).not.toBeNull();
 			expect(res.body).toMatchObject({ timeInTicks: 666 });

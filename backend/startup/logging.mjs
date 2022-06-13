@@ -13,6 +13,7 @@ export default function () {
 			}),
 			new winston.transports.MongoDB({
 				db: 'mongodb://127.0.0.1:27017/moi',
+				options: { useUnifiedTopology: true },
 				level: 'error',
 			}),
 		],

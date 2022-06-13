@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import Home from './components/Home';
 import Records from './components/Records';
 import NewPlayer from './components/NewPlayer';
 import NewRecord from './components/NewRecord';
