@@ -42,11 +42,13 @@ h1 {
 	padding: 30px;
 	font-family: 'Rock Salt';
 }
+
 h2 {
 	font-size: 1.6rem;
 	padding-bottom: 30px;
 	font-family: 'Rock Salt';
 }
+
 h3 {
 	padding-bottom: 10px;
 }
@@ -68,10 +70,12 @@ label {
 .bold {
 	font-weight: bold;
 }
+
 .flex-row {
 	display: flex;
 	flex-direction: row;
 }
+
 .flex-column {
 	display: flex;
 	flex-direction: column;
@@ -88,9 +92,12 @@ label {
 }
 
 .se {
+	width: 100%;
 	justify-content: space-evenly;
 }
+
 .sb {
+	width: 100%;
 	justify-content: space-between;
 }
 
@@ -125,6 +132,7 @@ header {
 	padding: 40px;
 	font-size: 24px;
 	border-bottom: solid var(--vbright) 1px;
+
 	nav {
 		display: flex;
 		justify-content: space-around;
@@ -139,8 +147,8 @@ header {
 
 a {
 	font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-	'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-	sans-serif;
+		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+		sans-serif;
 	text-decoration: none;
 	color: var(--vbright);
 }
@@ -156,6 +164,7 @@ a {
 	color: var(--vbright);
 	background-color: black;
 	cursor: pointer;
+
 	&:hover {
 		background-color: #575757;
 	}
@@ -178,6 +187,7 @@ a {
 	transform: rotate(45deg);
 	-webkit-transform: rotate(45deg);
 }
+
 .dropdown-btn-open::after {
 	content: '';
 	position: absolute;
@@ -207,9 +217,11 @@ select {
 	height: 52px;
 	margin-bottom: 14px,
 }
+
 .new-record-form {
 	gap: 50px;
 }
+
 form {
 	display: flex;
 	flex-direction: column;
@@ -220,17 +232,20 @@ form {
 		border-left: solid grey 1px;
 		border-right: solid grey 1px;
 		width: 100px;
+
 		input {
 			height: 30px;
 			width: 50px;
 		}
 	}
+
 	textarea {
 		height: 52px;
 		margin-bottom: 14px,
 	}
 
-	.input-dark, textarea {
+	.input-dark,
+	textarea {
 		background-color: black;
 		color: var(--vbright);
 		border: lightgrey 1px solid;
@@ -240,7 +255,7 @@ form {
 
 	input[type=number]::-webkit-inner-spin-button {
 		position: relative;
-		left: 10px;  
+		left: 10px;
 		height: 40px;
 		filter: invert(1);
 		padding: 10px;
@@ -305,6 +320,7 @@ table {
 		color: var(--vbright);
 		padding: 6px 2px;
 	}
+
 	.rank {
 		display: flex;
 		justify-content: center;
@@ -314,9 +330,11 @@ table {
 	td[data-mode-value=true] {
 		color: red;
 	}
+
 	.boss {
 		font-size: 1.2rem;
 	}
+
 	.players-td {
 		text-align: left;
 		padding-left: 10px;
@@ -346,8 +364,19 @@ table {
 	justify-content: space-evenly;
 	border-radius: 6px;
 	align-items: center;
+
 	h2 {
 		padding-bottom: 0;
+	}
+}
+
+.remove-popup {
+	.popup-content {
+		height: 310px;
+	}
+
+	h2 {
+		padding-bottom: 12px;
 	}
 }
 
@@ -371,4 +400,33 @@ table.non-records {
 	background-color: black;
 	font-size: 1rem;
 	cursor: pointer;
+}
+
+.remove-btn {
+	height: 60px;
+	background-color: transparent;
+	border: 0;
+	cursor: pointer;
+	filter: invert(19%) sepia(100%) saturate(2000%) hue-rotate(359deg) brightness(94%) contrast(117%);
+	transition: all 300ms;
+
+	&:hover {
+		transform: scale(1.1);
+		filter: invert(27%) sepia(100%) saturate(2000%) hue-rotate(359deg) brightness(94%) contrast(117%);
+	}
+}
+
+.exit-btn {
+	width: 40px;
+	position: relative;
+	top: -20px;
+	right: -12px;
+	background-color: transparent;
+	border: 0;
+	font-size: 1.6rem;
+	cursor: pointer;
+}
+
+.space40 {
+	width: 40px;
 }

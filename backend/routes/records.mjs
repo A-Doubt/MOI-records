@@ -88,7 +88,7 @@ router.post('/', auth, async (req, res) => {
 	res.status(201).send(record);
 });
 
-router.delete('/:id', validateObjectId, async (req, res) => {
+router.delete('/:id', [auth, validateObjectId], async (req, res) => {
 	const task = Fawn.Task();
 
 	const record = await Record.findById(req.params.id);
