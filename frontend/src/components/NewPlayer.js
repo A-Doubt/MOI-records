@@ -42,7 +42,6 @@ export default function NewPlayer() {
 			if (process.env.NODE_ENV === 'production') {
 				url = '/api/players';
 			} else url = 'http://localhost:3000/api/players';
-			setErrorMessage('Sending the request, please wait...');
 			const body = { name: nameInput };
 			const res = await axios({
 				url: url,

@@ -195,8 +195,8 @@ export default function NewRecord() {
 		setErrorMessage('');
 		if (!inputValues.boss.value) return setErrorMessage('Pick a boss');
 		if (
-			inputValues.mode.value !== false ||
-			inputValues.mode.value === true
+			inputValues.mode.value !== false &&
+			inputValues.mode.value !== true
 		) {
 			return setErrorMessage('Pick a mode');
 		}
