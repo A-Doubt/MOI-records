@@ -4,9 +4,9 @@
   "description": "Record times spreadsheet for Men of Iron clan in an MMORPG called Runescape",
   "main": "index.js",
   "scripts": {
-    "start": "cd ./backend/ && npm install && node index.js",
+    "start": "cd ./backend/ && npm install && node index.mjs",
     "heroku-postbuild": "cd ./frontend/ && npm install && npm run build",
-    "backend": "cd ./backend/ && nodemon index.js ",
+    "backend": "cd ./backend/ && nodemon index.mjs ",
     "frontend": "cd ./frontend/ && npm run start"
   },
   "author": "Paweł Wiśniewski",
