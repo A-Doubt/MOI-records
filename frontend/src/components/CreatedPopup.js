@@ -6,7 +6,6 @@ export default function CreatedPopup(props) {
 				<button
 					className="submit-btn"
 					onClick={() => {
-						console.log('navigate now');
 						window.location.reload();
 					}}
 				>

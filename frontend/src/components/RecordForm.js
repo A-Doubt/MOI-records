@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Select from 'react-select';
 import React from 'react';
 import {
@@ -90,7 +91,6 @@ export default function RecordForm(props) {
 				});
 
 				setInputOptions({ ...inputOptions, modes, sizes });
-				console.log('inputValues', inputValues);
 			}
 		});
 	}, [inputValues.boss.value]);

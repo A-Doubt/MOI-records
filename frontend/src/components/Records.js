@@ -10,8 +10,17 @@ function Records() {
 
 	React.useEffect(() => {
 		async function fetchNumberOfRecords() {
-			const number = await axios.get('http://localhost:3000/api/records/count')
-			setNumberOfRecords(number.data);
+			try {
+				let url;
+				if (process.env.NODE_ENV === 'production') {
+					url = '/api/records';
+				} else url = 'http://localhost:3000/api/records';
+	
+				const number = await axios.get(`${url}/count`)
+				setNumberOfRecords(number.data);
+			} catch (err) {
+				console.error(err.message)
+			}
 		}
 		fetchNumberOfRecords()
 	}, [])
@@ -19,13 +28,18 @@ function Records() {
 	async function handleSubmit(body, sizesArray) {
 		try {
 			let resArray = [];
+			let url;
+			if (process.env.NODE_ENV === 'production') {
+				url = '/api/records';
+			} else url = 'http://localhost:3000/api/records';
+
 
 			// if team size wasn't chosen make a query for all team sizes for the boss
 			if (body.teamSize === 'any') {
 				resArray = await Promise.all(
 					sizesArray.map((size) => {
 						return axios.get(
-							`http://localhost:3000/api/records/boss/?boss-name=${body.bossName}&team-size=${size}&hardmode=${body.hardmode}`
+							`${url}/boss/?boss-name=${body.bossName}&team-size=${size}&hardmode=${body.hardmode}`
 						);
 					})
 				);
@@ -33,7 +47,7 @@ function Records() {
 				// if boss size was chosen make 1 query
 			} else {
 				const res = await axios.get(
-					`http://localhost:3000/api/records/boss/?boss-name=${body.bossName}&team-size=${body.teamSize}&hardmode=${body.hardmode}`
+					`${url}/boss/?boss-name=${body.bossName}&team-size=${body.teamSize}&hardmode=${body.hardmode}`
 				);
 				resArray.push(res);
 			}

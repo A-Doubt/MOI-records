@@ -22,12 +22,21 @@ export default function NewRecord() {
 		const players = [];
 
 		async function fetchData() {
-			const data = await axios.get('http://localhost:3000/api/players');
-			data.data.forEach((player) => {
-				players.push({ label: player.name, value: player._id });
-			});
-			setPlayersOptions(players);
-			setTrimmedInputOptions(players);
+			try {
+				let url;
+				if (process.env.NODE_ENV === 'production') {
+					url = '/api/players';
+				} else url = 'http://localhost:3000/api/players';
+				
+				const data = await axios.get(url);
+				data.data.forEach((player) => {
+					players.push({ label: player.name, value: player._id });
+				});
+				setPlayersOptions(players);
+				setTrimmedInputOptions(players);
+			} catch (err) {
+				console.error(err.message);
+			}
 		}
 		fetchData();
 	}, []);
@@ -216,16 +225,20 @@ export default function NewRecord() {
 			notes: inputValues.notes ? inputValues.notes : 'none',
 		};
 
-		console.log('🚀handleSubmit ~ body', body);
 		try {
+			let url;
+			if (process.env.NODE_ENV === 'production') {
+				url = '/api/records';
+			} else url = 'http://localhost:3000/api/records';
+
 			const res = await axios({
-				url: 'http://localhost:3000/api/records',
+				url: url,
 				data: body,
 				method: 'post',
 				headers: { adminPassword: pwdInput },
 			});
 			const data = res.data;
-			setPopupVisible(true)
+			setPopupVisible(true);
 			return data;
 		} catch (err) {
 			setErrorMessage(err.response.data);
@@ -395,11 +408,7 @@ export default function NewRecord() {
 					</div>
 				</form>
 			</div>
-			{popupVisible && (
-				<CreatedPopup
-					itemCreated="Record"
-				/>
-			)}
+			{popupVisible && <CreatedPopup itemCreated="Record" />}
 		</>
 	);
 }

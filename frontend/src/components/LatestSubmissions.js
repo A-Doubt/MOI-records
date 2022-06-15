@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import RemovePopup from './RemovePopup';
 import React from 'react';
 import axios from 'axios';
@@ -14,10 +15,13 @@ export default function LatestSubmissions() {
 
 	React.useEffect(() => {
 		try {
+			let url;
+			if (process.env.NODE_ENV === 'production') {
+				url = '/api/records/sort';
+			} else url = 'http://localhost:3000/api/records/sort';
+
 			async function fetchData() {
-				const data = await axios.get(
-					`http://localhost:3000/api/records/sort`
-				);
+				const data = await axios.get(url);
 				setLatestSubmissions(data);
 			}
 			fetchData();
@@ -96,18 +100,21 @@ export default function LatestSubmissions() {
 		}
 	}, [latestSubmissions]);
 
-	
-	const [is403, setIs403] = React.useState(false)
+	const [is403, setIs403] = React.useState(false);
 
 	async function removeSubmission(e, pwdInput) {
 		try {
+			let url;
+			if (process.env.NODE_ENV === 'production') {
+				url = `/api/records/${clickedId}`;
+			} else url = `http://localhost:3000/api/records/${clickedId}`;
 			setIs403(false);
 			e.preventDefault();
 			const res = await axios({
-				url: `http://localhost:3000/api/records/${clickedId}`,
+				url: url,
 				method: 'delete',
 				headers: { adminPassword: pwdInput },
-			})
+			});
 			const data = res.data;
 			window.location.reload();
 			return data;
@@ -118,7 +125,6 @@ export default function LatestSubmissions() {
 	}
 
 	function closePopup() {
-		console.log('here');
 		setPopupOpen(false);
 	}
 

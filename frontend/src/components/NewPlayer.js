@@ -2,12 +2,11 @@ import CreatedPopup from './CreatedPopup';
 import axios from 'axios';
 import React from 'react';
 import Select from 'react-select';
-import { customSelectTheme } from '../services/react-select-helper'
+import { customSelectTheme } from '../services/react-select-helper';
 
 export default function NewPlayer() {
-
 	const [popupVisible, setPopupVisible] = React.useState(false);
-	
+
 	// contolling input
 	const [nameInput, setNameInput] = React.useState('');
 	const [pwdInput, setPwdInput] = React.useState('');
@@ -18,11 +17,20 @@ export default function NewPlayer() {
 		const players = [];
 
 		async function fetchData() {
-			const data = await axios.get('http://localhost:3000/api/players');
-			data.data.forEach((player) => {
-				players.push({ label: player.name, value: player._id });
-			});
-			setPlayersOptions(players);
+			try {
+				let url;
+				if (process.env.NODE_ENV === 'production') {
+					url = '/api/players';
+				} else url = 'http://localhost:3000/api/players';
+
+				const data = await axios.get(url);
+				data.data.forEach((player) => {
+					players.push({ label: player.name, value: player._id });
+				});
+				setPlayersOptions(players);
+			} catch (err) {
+				console.log(err.reponse);
+			}
 		}
 		fetchData();
 	}, []);
@@ -30,24 +38,28 @@ export default function NewPlayer() {
 	async function handleSubmit(e) {
 		e.preventDefault();
 		try {
+			let url;
+			if (process.env.NODE_ENV === 'production') {
+				url = '/api/players';
+			} else url = 'http://localhost:3000/api/players';
 			setErrorMessage('Sending the request, please wait...');
 			const body = { name: nameInput };
 			const res = await axios({
-				url: 'http://localhost:3000/api/players',
+				url: url,
 				data: body,
 				method: 'post',
-				headers: { adminPassword: pwdInput }
+				headers: { adminPassword: pwdInput },
 			});
 
 			const data = res.data;
-			console.log(data);
 			setErrorMessage('');
 			setPopupVisible(true);
 			return data;
 		} catch (err) {
-			console.log(err.response);
 			if (err.response.data.includes('unique'))
-				return setErrorMessage('That player already is in the database');
+				return setErrorMessage(
+					'That player already is in the database'
+				);
 			setErrorMessage(err.response.data);
 		}
 	}
@@ -89,22 +101,22 @@ export default function NewPlayer() {
 						className="input-dark"
 						autoComplete="off"
 					></input>
-					<button type="submit" className="submit-btn">Submit</button>
+					<button type="submit" className="submit-btn">
+						Submit
+					</button>
 				</form>
 			</div>
 			<div className="flex-column centered mt-60">
-				<label htmlFor="players-in-db">Players already in the database:</label>
+				<label htmlFor="players-in-db">
+					Players already in the database:
+				</label>
 				<Select
 					id="players-in-db"
 					options={playersOptions}
 					styles={customSelectTheme}
 				/>
 			</div>
-			{popupVisible && (
-				<CreatedPopup
-					itemCreated="Player"
-				/>
-			)}
+			{popupVisible && <CreatedPopup itemCreated="Player" />}
 		</>
 	);
 }
