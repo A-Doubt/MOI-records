@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
 
-
 *,
 *::before,
 *::after {
@@ -14,6 +13,19 @@
 :root {
 	--vbright: #eeeeee;
 }
+
+/*
+TABLE OF CONTENT:
+	1. GLOBAL
+		1.1 GLOBAL CLASSES
+	2. HEADER
+	3. INPUTS AND FORMS
+	4. Tables
+	5. Popups
+	6. Non-header buttons
+*/
+
+// 1. HTML tags in general - Global
 
 body {
 	font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -31,10 +43,13 @@ body {
 a {
 	width: 100%;
 	height: 100%;
-	color: lightgrey;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+		sans-serif;
+	text-decoration: none;
+	color: var(--vbright);
 }
 
 h1 {
@@ -61,7 +76,7 @@ label {
 	text-align: center;
 }
 
-// Global classes
+// 1.1 Global classes
 
 .absolute {
 	position: absolute;
@@ -69,6 +84,18 @@ label {
 
 .bold {
 	font-weight: bold;
+}
+
+.error {
+	color: red;
+}
+
+.green {
+	color: green;
+}
+
+.spaced {
+	letter-spacing: 0.1rem;
 }
 
 .flex-row {
@@ -80,21 +107,6 @@ label {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-}
-
-.flex-column-600 {
-	@media only screen and (max-width: 600px) {
-		flex-direction: column;
-	}
-}
-.flex-column-800 {
-	@media only screen and (max-width: 800px) {
-		flex-direction: column;
-	}
-}
-
-.gap50 {
-	gap: 50px;
 }
 
 .centered {
@@ -112,33 +124,43 @@ label {
 	justify-content: space-between;
 }
 
-.error {
-	color: red;
-}
 
-.spaced {
-	letter-spacing: 0.1rem;
-}
 
 .space {
 	display: flex;
 	flex-direction: column;
 }
 
-.green {
-	color: green;
+.flex-column-600 {
+	@media only screen and (max-width: 600px) {
+		flex-direction: column;
+	}
 }
 
-.style-icon {
-	width: 30px;
+.flex-column-800 {
+	@media only screen and (max-width: 800px) {
+		flex-direction: column;
+	}
+}
+
+.gap50 {
+	gap: 50px;
 }
 
 .mt-60 {
 	margin-top: 60px;
 }
 
+.space40 {
+	width: 40px;
+}
 
-// Header
+.style-icon {
+	width: 30px;
+}
+
+
+// 2. Header
 header {
 	padding: 40px;
 	font-size: 24px;
@@ -154,14 +176,6 @@ header {
 .logo {
 	width: 320px;
 	font-family: 'Rock Salt', cursive;
-}
-
-a {
-	font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-		sans-serif;
-	text-decoration: none;
-	color: var(--vbright);
 }
 
 .header-btn {
@@ -219,6 +233,8 @@ a {
 	padding: 10px;
 }
 
+// 3. Inputs and forms
+
 input,
 select {
 	font-size: 1.2rem;
@@ -274,6 +290,8 @@ form {
 		filter: invert(1);
 	}
 }
+
+// 4. Table
 
 table {
 	font-family: 'Roboto';
@@ -351,6 +369,18 @@ table {
 	}
 }
 
+table.non-records {
+	tr:nth-child(2n+1) {
+		background-color: #111c38;
+	}
+
+	tr:nth-child(2n) {
+		background-color: #03022e;
+	}
+}
+
+// 5. Popups
+
 .popup {
 	position: fixed;
 	margin-left: auto;
@@ -373,6 +403,7 @@ table {
 	justify-content: space-evenly;
 	border-radius: 6px;
 	align-items: center;
+
 	@media only screen and (max-width: 600px) {
 		width: 300px;
 	}
@@ -392,15 +423,7 @@ table {
 	}
 }
 
-table.non-records {
-	tr:nth-child(2n+1) {
-		background-color: #111c38;
-	}
-
-	tr:nth-child(2n) {
-		background-color: #03022e;
-	}
-}
+// 6. Non-header buttons
 
 .submit-btn {
 	margin: 20px;
@@ -437,8 +460,4 @@ table.non-records {
 	border: 0;
 	font-size: 1.6rem;
 	cursor: pointer;
-}
-
-.space40 {
-	width: 40px;
 }
