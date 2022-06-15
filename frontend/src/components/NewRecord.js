@@ -27,7 +27,7 @@ export default function NewRecord() {
 				if (process.env.NODE_ENV === 'production') {
 					url = '/api/players';
 				} else url = 'http://localhost:3000/api/players';
-				
+
 				const data = await axios.get(url);
 				data.data.forEach((player) => {
 					players.push({ label: player.name, value: player._id });

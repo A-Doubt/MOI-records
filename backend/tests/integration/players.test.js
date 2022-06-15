@@ -9,7 +9,6 @@ const id2 = new mongoose.Types.ObjectId();
 const recordId1 = new mongoose.Types.ObjectId();
 const recordId2 = new mongoose.Types.ObjectId();
 
-
 const player1 = new Player({
 	_id: id1,
 	name: 'Player1Name',
@@ -92,27 +91,27 @@ describe('/api/players', () => {
 				.set('adminPassword', process.env.adminPassword)
 				.send({ name: 'player name' });
 
-			const player = await Player.findOne({ name: 'player name' })
+			const player = await Player.findOne({ name: 'player name' });
 			expect(res.status).toBe(201);
-			expect(player).toMatchObject({ name: 'player name' })
+			expect(player).toMatchObject({ name: 'player name' });
 		});
 
 		it('returns a player if it is saved', async () => {
 			const res = await request(server)
 				.post('/api/players')
 				.set('adminPassword', process.env.adminPassword)
-				.send({ name: 'player name' })
+				.send({ name: 'player name' });
 
-				expect(res.status).toBe(201);
-				expect(res.body).toMatchObject({ name: 'player name' })
-				expect(res.body._id).not.toBeNull();
+			expect(res.status).toBe(201);
+			expect(res.body).toMatchObject({ name: 'player name' });
+			expect(res.body._id).not.toBeNull();
 		});
 
 		it('returns 400 if player missing a name', async () => {
 			const res = await request(server)
 				.post('/api/players')
 				.set('adminPassword', process.env.adminPassword)
-				.send({ name: '' })
+				.send({ name: '' });
 
 			expect(res.status).toBe(400);
 		});
@@ -121,32 +120,31 @@ describe('/api/players', () => {
 			const res = await request(server)
 				.post('/api/players')
 				.set('adminPassword', 'wrong password')
-				.send({ name: 'player name' })
+				.send({ name: 'player name' });
 
 			expect(res.status).toBe(403);
-		})
+		});
 	});
 
 	describe('PUT /', () => {
-		it('updates a player\'s name', async () => {
+		it("updates a player's name", async () => {
 			Player.collection.insertOne(player1);
 
 			const res = await request(server)
 				.put(`/api/players/${id1}`)
-				.send({ name: 'updated name' })
+				.send({ name: 'updated name' });
 
 			expect(res.body.name).toBe('updated name');
 			expect(res.status).toBe(200);
-		})
+		});
 
 		it('adds a new record into the player entry', async () => {
-
 			const recordId = new mongoose.Types.ObjectId();
 			Player.collection.insertOne(player1);
 
 			const res = await request(server)
 				.put(`/api/players/${id1}`)
-				.send({...player1, records: [...player1.records, recordId]})
+				.send({ ...player1, records: [...player1.records, recordId] });
 
 			expect(res.body.records.length).toBe(3);
 			expect(res.body.records).toContain(recordId.toHexString());

@@ -10,4 +10,4 @@ export default function connectToMongoDB() {
 		.catch((err) => console.error(err.message));
 
 	Fawn.init(db);
-};
+}

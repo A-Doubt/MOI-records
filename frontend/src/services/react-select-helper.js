@@ -232,10 +232,13 @@ export const customSelectTheme = {
 		};
 	},
 	singleValue: (provided, state) => {
-		return { 
-			...provided, 
-			color: state.data.value || state.data.value === false ? 'white' : 'grey',
-			backgroundColor: 'black' 
+		return {
+			...provided,
+			color:
+				state.data.value || state.data.value === false
+					? 'white'
+					: 'grey',
+			backgroundColor: 'black',
 		};
 	},
 	valueContainer: (provided, state) => {
@@ -256,7 +259,7 @@ export const customSelectTheme = {
 			boxShadow: state.menuIsOpen
 				? '0 0 0 2px darkblue'
 				: '0 0 0 1px rgb(70, 70, 70)',
-			pointerEvents: 'auto'
+			pointerEvents: 'auto',
 		};
 	},
 	dropdownIndicator: (provided, state) => {
@@ -265,7 +268,6 @@ export const customSelectTheme = {
 			cursor: state.isDisabled ? 'not-allowed' : 'pointer',
 			backgroundColor: 'black',
 			color: 'white',
-
 		};
 	},
 	indicatorSeparator: (provided, state) => {

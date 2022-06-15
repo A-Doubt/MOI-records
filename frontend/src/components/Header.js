@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from 'react-router-dom';
 import React from 'react';
 
@@ -73,7 +74,6 @@ function Header() {
 				<button className="header-btn">
 					<Link to="/latest_submissions">Latest submissions</Link>
 				</button>
-				
 			</nav>
 		</header>
 	);

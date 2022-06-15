@@ -3,17 +3,20 @@ import Header from './components/Header';
 import Records from './components/Records';
 import NewPlayer from './components/NewPlayer';
 import NewRecord from './components/NewRecord';
-import LatestSubmissions from './components/LatestSubmissions'
+import LatestSubmissions from './components/LatestSubmissions';
 
 function App() {
 	return (
 		<BrowserRouter>
-		<Header />
+			<Header />
 			<Routes>
 				<Route path="/" element={<Records />} />
-				<Route path="/submit" element={<NewRecord />}/>
+				<Route path="/submit" element={<NewRecord />} />
 				<Route path="/new_player" element={<NewPlayer />} />
-				<Route path="/latest_submissions" element={<LatestSubmissions />}/>
+				<Route
+					path="/latest_submissions"
+					element={<LatestSubmissions />}
+				/>
 			</Routes>
 		</BrowserRouter>
 	);
