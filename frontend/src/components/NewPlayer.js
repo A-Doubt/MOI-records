@@ -78,6 +78,7 @@ export default function NewPlayer() {
 						onChange={handleNameChange}
 						value={nameInput}
 						className="input-dark"
+						autoComplete="off"
 					></input>
 					<label htmlFor="pwd">Admin key:</label>
 					<input

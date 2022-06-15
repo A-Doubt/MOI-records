@@ -42,6 +42,19 @@ export default function LatestSubmissions() {
 						</span>
 					);
 				});
+
+				// fill the remaining spots when not all players were chosen
+				// with question marks.
+				for (let i = record.encounter.teamSize - 1; i > 0; i--) {
+					if (!players[i]) {
+						players[i] = (
+							<span className="space" key={nanoid()}>
+								?
+							</span>
+						);
+					}
+				}
+
 				return (
 					<tr key={nanoid()}>
 						<td>{++rows}</td>

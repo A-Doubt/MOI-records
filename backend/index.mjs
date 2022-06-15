@@ -7,6 +7,8 @@ import routes from './startup/routes.mjs';
 
 const app = express();
 
+console.log('NODE_ENV: ', process.env.NODE_ENV)
+
 logging(); // enable winston logger
 connectToMongoDB(); // connect to DB
 routes(app); // routes + cors/body parser

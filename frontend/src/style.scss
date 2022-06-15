@@ -82,6 +82,17 @@ label {
 	height: 100%;
 }
 
+.flex-column-600 {
+	@media only screen and (max-width: 600px) {
+		flex-direction: column;
+	}
+}
+.flex-column-800 {
+	@media only screen and (max-width: 800px) {
+		flex-direction: column;
+	}
+}
+
 .gap50 {
 	gap: 50px;
 }
@@ -207,8 +218,6 @@ a {
 	background-color: grey;
 	padding: 10px;
 }
-
-// ???
 
 input,
 select {
@@ -336,7 +345,7 @@ table {
 	}
 
 	.players-td {
-		text-align: left;
+		text-align: center;
 		padding-left: 10px;
 		line-height: 26px;
 	}
@@ -364,6 +373,9 @@ table {
 	justify-content: space-evenly;
 	border-radius: 6px;
 	align-items: center;
+	@media only screen and (max-width: 600px) {
+		width: 300px;
+	}
 
 	h2 {
 		padding-bottom: 0;

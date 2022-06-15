@@ -301,7 +301,7 @@ export default function NewRecord() {
 							{inputValues.size.value && playersInputsJSX}
 						</div>
 					</div>
-					<div className="flex-row gap50">
+					<div className="flex-row gap50 flex-column-800">
 						<div className="flex-column">
 							<label htmlFor="minutes">Minutes</label>
 							<input

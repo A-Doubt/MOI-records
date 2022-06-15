@@ -6,7 +6,7 @@ export default function connectToMongoDB() {
 	const db = config.get('db');
 	mongoose
 		.connect(db, { useUnifiedTopology: true })
-		.then(console.log(`Connected to ${db}...`))
+		.then(console.log(`Connecting to ${db}...`))
 		.catch((err) => console.error(err.message));
 
 	Fawn.init(db);

@@ -17,7 +17,6 @@ function Records() {
 	}, [])
 
 	async function handleSubmit(body, sizesArray) {
-		console.log(body);
 		try {
 			let resArray = [];
 
@@ -39,7 +38,6 @@ function Records() {
 				resArray.push(res);
 			}
 
-			console.log(resArray);
 			let records = [];
 			resArray.forEach((res) => {
 				let filteredRecords = [];
@@ -72,7 +70,6 @@ function Records() {
 				});
 				records.push(filteredRecords);
 			});
-			console.log(records);
 			setFetchedRecords(records);
 		} catch (err) {
 			console.error(err);

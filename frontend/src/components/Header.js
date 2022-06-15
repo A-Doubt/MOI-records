@@ -37,7 +37,7 @@ function Header() {
 
 	return (
 		<header>
-			<nav className="flex-row se">
+			<nav className="flex-row se flex-column-600">
 				<div className="logo">
 					<p>Men of Iron</p>
 					<p>Records spreadsheet</p>
