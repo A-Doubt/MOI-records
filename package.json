@@ -6,7 +6,7 @@
   "scripts": {
     "start": "cd ./backend/ && npm install && node index.js",
     "heroku-postbuild": "cd ./frontend/ && npm install && npm run build",
-    "backend": "cd ./backend/ && nodemon server.js ",
+    "backend": "cd ./backend/ && nodemon index.js ",
     "frontend": "cd ./frontend/ && npm run start"
   },
   "author": "Paweł Wiśniewski",
