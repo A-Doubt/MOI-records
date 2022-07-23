@@ -199,6 +199,11 @@ export const bossesOptions = [
 		teamSizes: [10],
 		modes: [false],
 	},
+	{
+		bossName: 'Zamorak, Lord of Chaos',
+		teamSizes: [1, 2, 3, 4, 'mass'],
+		modes: [false],
+	},
 ];
 
 export const customSelectTheme = {
